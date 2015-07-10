@@ -8,6 +8,9 @@ Not much is required:
 * Clang/GCC
 * Git
 
+## warning
+This is a prototype-ish, it's very messy.
+
 ## building
 
 ```bash

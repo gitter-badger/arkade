@@ -6,6 +6,7 @@
 #include <stdbool.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <curl/curl.h>
 #include <unistd.h>
 
 #include "vector.h"
