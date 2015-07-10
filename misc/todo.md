@@ -29,24 +29,24 @@ features
     - run: compiles and runs the project
     - test: runs tests
 
-[project]
-name = "Name"
-version = "0.0.1"
-authors = [
-    "Full Name <email@address.tld>"
-    "Full Name <email@address.tld>"
-]
+    [project]
+    name = "Name"
+    version = "0.0.1"
+    authors = [
+        "Full Name <email@address.tld>"
+        "Full Name <email@address.tld>"
+    ]
 
-[dependencies]
-note that I've given it an alias,
-this means in ark code it's used as
+    [dependencies]
+    // note that I've given it an alias,
+    // this means in ark code it's used as
 
-    dependency mysql;                       
+        dependency mysql;                       
 
-and a version is specified
-mysql = [
-    "github.com/mysql/lib-mysql", 
-    "5.6.25"
-]
-// optional formatting, i like the one below
-mysql = ["github.com/mysql/lib-mysql", "5.6.25"]
+    // and a version is specified
+    mysql = [
+        "github.com/mysql/lib-mysql", 
+        "5.6.25"
+    ]
+    // optional formatting, i like the one below
+    mysql = ["github.com/mysql/lib-mysql", "5.6.25"]
