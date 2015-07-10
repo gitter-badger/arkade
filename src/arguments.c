@@ -28,6 +28,11 @@ void destroy_command(command *cmd) {
     free(cmd);
 }
 
+int destroy_commands(any_t __attribute__((unused)) passed_data, any_t item) {
+    destroy_command(item);
+    return MAP_OK;
+}
+
 void help_action() {
     // todo we can iterate through our
     // command/args list?
@@ -40,10 +45,11 @@ void parse_arguments(int argc, char** argv) {
         return;
     }
 
+    // populate hashmap
     commands = hashmap_new();
     hashmap_put(commands, "help", create_command("help", "shows this help menu", &help_action, 0));
-    char *command_arg = argv[1];
 
+    char *command_arg = argv[1];
     command *cmd = NULL;
     if (hashmap_get(commands, command_arg, (void**) &cmd) == MAP_OK) {
         cmd->action();
@@ -52,5 +58,7 @@ void parse_arguments(int argc, char** argv) {
         printf("error: no such subcommand `%s`\n", command_arg);
     }
 
+    // cleanup our hashmap and its contents
+    hashmap_iterate(commands, destroy_commands, NULL);
     hashmap_free(commands);
 }
