@@ -40,13 +40,13 @@ static FILE *create_file(const char *name) {
     return handle;
 }
 
-void help_action() {
+void help_action(command *cmd, vector *arguments) {
     // todo we can iterate through our
     // command/args list?
     printf("%s", help);
 }
 
-void new_action() {
+void new_action(command *cmd, vector *arguments) {
     const char *package_name = "Onion Man";
     const char *package_author = "John Terry";
     const char *package_version = "0.0.1";
@@ -82,7 +82,7 @@ void new_action() {
     system("git commit -m \"created new project with arkade!\"");
 }
 
-void publish_action() {
+void publish_action(command *cmd, vector *arguments) {
     // create repository on github
     // push repository
     // TODO fuck with curl to send create repo request

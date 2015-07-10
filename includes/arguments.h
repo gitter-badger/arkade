@@ -6,11 +6,13 @@
 
 #include "hashmap.h"
 #include "actions.h"
+#include "vector.h"
 
 typedef struct {
     char *name;
     char *desc;
-    void (*action)(void);
+    void (*action)(vector*);
+    vector *arguments;
     size_t arg_count;
 } command;
 
@@ -21,7 +23,7 @@ typedef struct {
     void (*action)(void);
 } flag;
 
-command *create_command(char *name, char *desc, void (*action)(void), size_t arg_count);
+command *create_command(char *name, char *desc, void (*action)(vector*), size_t arg_count);
 
 void destroy_command(command *cmd);
 
