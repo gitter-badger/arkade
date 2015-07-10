@@ -104,33 +104,46 @@ void new_action(vector *arguments) {
 void publish_action(vector *arguments) {
     CURL *curl;
     curl = curl_easy_init();
-    if (curl) {
-        /**
-        curl -u 'USER' https://api.github.com/user/repos -d '{"name":"REPO"}'
-        **/
-        const char *username = "felixangell";
-        const char *reponame = "test";
-        
-        // TODO JSON builder, then we can easily
-        // add properties from the TOML file too.
-        char *request = sdsnew("{\"name\": \"");
-        request = sdscat(request, reponame);
-        request = sdscat(request, "\"}");
-
-        char *api_url = sdsnew("https://api.github.com/");
-        api_url = sdscat(api_url, username);
-        api_url = sdscat(api_url, "/");
-        api_url = sdscat(api_url, reponame);
-
-        curl_easy_setopt(curl, CURLOPT_URL, api_url);
-        curl_easy_setopt(curl, CURLOPT_POST, 1);
-        curl_easy_setopt(curl, CURLOPT_POSTFIELDS, request);
+    if (!curl) {
+        printf("error: could not fuck with curl\n");
+        return;
     }
-    // create repository on github
-    // push repository
-    // TODO fuck with curl to send create repo request
-    // add a remote, maybe diff name than origin
-    // push to remote
+
+    const char *username = "felixangell";
+    const char *reponame = "test";
+    
+    // TODO JSON builder, then we can easily
+    // add properties from the TOML file too.
+    char *request = sdsnew("{\"name\": \"");
+    request = sdscat(request, reponame);
+    request = sdscat(request, "\"}");
+
+    char *api_url = sdsnew("https://api.github.com/");
+    api_url = sdscat(api_url, username);
+    api_url = sdscat(api_url, "/");
+    api_url = sdscat(api_url, reponame);
+
+    char *repo_url = sdsnew("https://github.com/");
+    repo_url = sdscat(repo_url, username);
+    repo_url = sdscat(repo_url, "/");
+    repo_url = sdscat(repo_url, reponame);
+
+    curl_easy_setopt(curl, CURLOPT_URL, api_url);
+    curl_easy_setopt(curl, CURLOPT_POST, 1);
+    curl_easy_setopt(curl, CURLOPT_POSTFIELDS, request);
+
+    char *add_remote = sdsnew("git remote add ark_origin ");
+    add_remote = sdscat(add_remote, repo_url);
+    system(add_remote);
+    
+    system("git add --all");
+    system("git commit -m \"publish\"");
+    system("git push -u ark_origin master");
+
+    sdsfree(api_url);
+    sdsfree(request);
+    sdsfree(repo_url);
+    sdsfree(add_remote);
 }
 
 void create_config_file(const char *package_name, const char *package_version, const char *package_author, const char *package_author_email) {
