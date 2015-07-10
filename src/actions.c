@@ -106,34 +106,32 @@ void publish_action(vector *arguments) {
     // push to remote
 }
 
-// WHY IS THIS SO UGLY?
 void create_config_file(const char *package_name, const char *package_version, const char *package_author, const char *package_author_email) {
     char *config_file_name = sdsnew(package_name);
     config_file_name = sdscat(config_file_name, "/" CONFIG_NAME);
 
     FILE *config_file = create_file(config_file_name);
-    fprintf(config_file, "[package]\n");
-    fprintf(config_file, "name = %s\n", package_name);
-    fprintf(config_file, "version = %s\n", package_version);
-    fprintf(config_file, "authors = [\n");
-    fprintf(config_file, "\t\"%s <%s>\"\n", package_author, package_author_email);
-    fprintf(config_file, "]\n");
+    fprintf(config_file, "[package]\n"
+        "name = %s\n"
+        "version = %s\n"
+        "authors = [\n"
+        "\t\"%s <%s>\"\n"
+        "]\n", package_name, package_version, package_author, package_author_email);
     fclose(config_file);
 
     sdsfree(config_file_name);
 }
 
-// WHY IS THIS SO UGLY?
 void create_gitignore_file(const char *package_name) {
     char *gitignore_name = sdsnew(package_name);
     gitignore_name = sdscat(gitignore_name, "/" GITIGNORE_NAME);
 
     FILE *gitignore = create_file(gitignore_name);
-    fprintf(gitignore, "_deps/\n");     // dependencies
-    fprintf(gitignore, "*.s/\n");       // asm
-    fprintf(gitignore, "*.ll/\n");      // llvm-ir
-    fprintf(gitignore, "*.o/\n");       // objects
-    fprintf(gitignore, "*.bc/\n");      // llvm bitcode
+    fprintf(gitignore, "_deps/\n"       // dependencies
+                        "*.s/\n"        // assembly
+                        "*.ll/\n"       // llvm-ir
+                        "*.o/\n"        // objects
+                        "*.bc/\n");     // llvm bitcode
     fclose(gitignore);
 
     sdsfree(gitignore_name);
