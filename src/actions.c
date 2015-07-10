@@ -128,10 +128,10 @@ void create_gitignore_file(const char *package_name) {
 
     FILE *gitignore = create_file(gitignore_name);
     fprintf(gitignore, "_deps/\n"       // dependencies
-                        "*.s/\n"        // assembly
-                        "*.ll/\n"       // llvm-ir
-                        "*.o/\n"        // objects
-                        "*.bc/\n");     // llvm bitcode
+        "*.s/\n"        // assembly
+        "*.ll/\n"       // llvm-ir
+        "*.o/\n"        // objects
+        "*.bc/\n");     // llvm bitcode
     fclose(gitignore);
 
     sdsfree(gitignore_name);
