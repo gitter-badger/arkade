@@ -109,6 +109,7 @@ void publish_action(vector *arguments) {
         return;
     }
 
+    // just assume this for now lol
     const char *username = "felixangell";
     const char *reponame = "test";
     
@@ -118,29 +119,32 @@ void publish_action(vector *arguments) {
     request = sdscat(request, reponame);
     request = sdscat(request, "\"}");
 
-    char *api_url = sdsnew("https://api.github.com/");
-    api_url = sdscat(api_url, username);
-    api_url = sdscat(api_url, "/");
-    api_url = sdscat(api_url, reponame);
+    struct curl_slist *headers = NULL;
+    headers = curl_slist_append(headers, "Accept: application/json");
+    headers = curl_slist_append(headers, "User-Agent: arkade");\
+    curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+    
+    curl_easy_setopt(curl, CURLOPT_VERBOSE, 1);
+    curl_easy_setopt(curl, CURLOPT_URL, "https://api.github.com/user/repos");
+    curl_easy_setopt(curl, CURLOPT_POST, 1);
+    curl_easy_setopt(curl, CURLOPT_POSTFIELDS, request);
+
+    curl_easy_perform(curl);
+    curl_easy_cleanup(curl);
 
     char *repo_url = sdsnew("https://github.com/");
     repo_url = sdscat(repo_url, username);
     repo_url = sdscat(repo_url, "/");
     repo_url = sdscat(repo_url, reponame);
 
-    curl_easy_setopt(curl, CURLOPT_URL, api_url);
-    curl_easy_setopt(curl, CURLOPT_POST, 1);
-    curl_easy_setopt(curl, CURLOPT_POSTFIELDS, request);
-
     char *add_remote = sdsnew("git remote add ark_origin ");
     add_remote = sdscat(add_remote, repo_url);
-    system(add_remote);
-    
-    system("git add --all");
-    system("git commit -m \"publish\"");
-    system("git push -u ark_origin master");
 
-    sdsfree(api_url);
+    // system(add_remote);
+    // system("git add --all");
+    // system("git commit -m \"publish\"");
+    // system("git push -u ark_origin master");
+
     sdsfree(request);
     sdsfree(repo_url);
     sdsfree(add_remote);

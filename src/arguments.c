@@ -29,8 +29,8 @@ void parse_arguments(int argc, char** argv) {
     // populate hashmap
     commands = hashmap_new();
     hashmap_put(commands, "help", create_command("help", "shows this help menu", &help_action, 0));
-    hashmap_put(commands, "new", create_command("new", "Create a new Ark project", &new_action, 0));
-    hashmap_put(commands, "publish", create_command("publish", "Publishes the project", &publish_action, 1));
+    hashmap_put(commands, "new", create_command("new", "Create a new Ark project", &new_action, 1));
+    hashmap_put(commands, "publish", create_command("publish", "Publishes the project", &publish_action, 0));
 
     char *command_arg = argv[1];
     command *cmd = NULL;
@@ -40,8 +40,8 @@ void parse_arguments(int argc, char** argv) {
         
         // note the 1 + is to account
         // for the arkade executable name
-        if ((start + cmd->arg_count) >= (size_t) argc) {
-            printf("error: not enough arguments for subcommand `%s`\n", cmd->name);
+        if ((start + cmd->arg_count) > (size_t) argc) {
+            printf("error: too many arguments for subcommand `%s`, \n", cmd->name);
             return;
         }
 
