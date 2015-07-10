@@ -11,10 +11,13 @@ Not much is required:
 # installing
 ## build
 
-    $ git clone git@github.com:ark-lang/arkade
-    $ cd arkade
-    $ make
-    $ export PATH=$PATH:~/path/to/arkade/bin
+```bash
+$ git clone git@github.com:ark-lang/arkade
+$ cd arkade
+$ make
+$ export PATH=$PATH:~/path/to/arkade/bin
+$ arkade new project_name # create a new project
+```
 
 # license
 [MIT](/LICENSE)

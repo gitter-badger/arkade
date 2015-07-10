@@ -54,11 +54,13 @@ void help_action(vector *arguments) {
 }
 
 void new_action(vector *arguments) {
+    // some default information
     const char *package_name = get_vector_item(arguments, 0);
     const char *package_author = "John Terry";
     const char *package_version = "0.0.1";
     const char *package_author_email = "terry@terry.cat";
 
+    // add the forward slash to the package name
     char *package_name_dir = sdsempty();
     package_name_dir = sdscat(package_name_dir, package_name);
     package_name_dir = sdscat(package_name_dir, "/");
@@ -70,6 +72,7 @@ void new_action(vector *arguments) {
         return;
     }
 
+    // create package directory
     create_directory(package_name_dir, 0700);
 
     // create our deps folder
@@ -127,7 +130,8 @@ void create_gitignore_file(const char *package_name) {
     gitignore_name = sdscat(gitignore_name, "/" GITIGNORE_NAME);
 
     FILE *gitignore = create_file(gitignore_name);
-    fprintf(gitignore, "_deps/\n"       // dependencies
+    fprintf(gitignore, 
+        "_deps/\n"       // dependencies
         "*.s/\n"        // assembly
         "*.ll/\n"       // llvm-ir
         "*.o/\n"        // objects
