@@ -13,7 +13,7 @@ static const char *help = {
     "\n"
 };
 
-const char *config_name = "Ark.toml";
+#define CONFIG_NAME = "Ark.toml";
 
 static map_t *commands;
 
@@ -56,9 +56,9 @@ void new_action() {
     create_directory("_deps", 0700);
     create_directory("src", 0700);
 
-    FILE *handle = fopen(config_name, "rb+");
+    FILE *handle = fopen(CONFIG_NAME, "rb+");
     if (!handle) {
-        handle = fopen(config_name, "wb");
+        handle = fopen(CONFIG_NAME, "wb");
         if (!handle) {
             printf("error: could not create config file\n");
             return;
