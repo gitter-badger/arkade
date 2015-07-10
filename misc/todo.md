@@ -8,6 +8,9 @@ json builder
 
 cleaner curl
     - this needs to auth with github
+    - i dont think github allows ssh so it will
+      have to use auth tokens or raw login details
+      perhaps support for both would be good
 
 cleaner way of concatenating strings (very very messy)
     - i can probably use variadic functions
