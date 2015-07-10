@@ -1,6 +1,8 @@
 #include <stdio.h>
 
-int main() {
-    printf("I'm not gay, but 20$ is 20$\n");
+#include "arguments.h"
+
+int main(int argc, char **argv) {
+    parse_arguments(argc, argv);
     return 0;
 }

@@ -1,6 +1,6 @@
 CC = clang
 C_SRC = $(wildcard src/*.c)
-C_FLAGS = -Wall -Wextra -std=c99
+C_FLAGS = -Wall -Wextra -std=c99 -Iincludes/
 
 NAME = arkade
 EXE_OUT_DIR = bin/
