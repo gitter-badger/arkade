@@ -5,8 +5,6 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-#include "util.h"
-
 typedef void* vector_item;
 
 typedef struct {
