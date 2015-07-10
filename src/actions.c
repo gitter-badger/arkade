@@ -150,6 +150,13 @@ void publish_action(vector *arguments) {
     sdsfree(add_remote);
 }
 
+void build_action(vector *arguments) {
+    // lol
+    // todo make this nicer
+    system("mkdir -p bin/");
+    system("ark build src/*.ark -o bin/main");
+}
+
 void create_config_file(const char *package_name, const char *package_version, const char *package_author, const char *package_author_email) {
     char *config_file_name = sdsnew(package_name);
     config_file_name = sdscat(config_file_name, "/" CONFIG_NAME);

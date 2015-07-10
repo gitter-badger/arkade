@@ -31,6 +31,7 @@ void parse_arguments(int argc, char** argv) {
     hashmap_put(commands, "help", create_command("help", "shows this help menu", &help_action, 0));
     hashmap_put(commands, "new", create_command("new", "Create a new Ark project", &new_action, 1));
     hashmap_put(commands, "publish", create_command("publish", "Publishes the project", &publish_action, 0));
+    hashmap_put(commands, "build", create_command("build", "Compiles the current ark project", &build_action, 0));
 
     char *command_arg = argv[1];
     command *cmd = NULL;
