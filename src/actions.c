@@ -14,9 +14,16 @@ static const char *help = {
     "\n"
 };
 
-static void create_directory(const char *path, int mode) {
+static bool dir_exists(const char *path) {
     struct stat st;
     if (stat(path, &st) == -1) {
+        return false;
+    }
+    return true;
+}
+
+static void create_directory(const char *path, int mode) {
+    if (!dir_exists(path)) {
         mkdir(path, mode);
     } else {
         printf("error: `%s` directory already exists\n", path);
@@ -34,7 +41,7 @@ static FILE *create_file(const char *name) {
         }
     } 
     else {
-        printf("error: could not create file `%s`\n", name);
+        printf("error: could not create file since it exists `%s`\n", name);
         return false;
     }
     return handle;
@@ -52,18 +59,28 @@ void new_action(vector *arguments) {
     const char *package_version = "0.0.1";
     const char *package_author_email = "terry@terry.cat";
 
+    char *package_name_dir = sdsempty();
+    package_name_dir = sdscat(package_name_dir, package_name);
+    package_name_dir = sdscat(package_name_dir, "/");
+
     // this is the parent directory for the project
-    create_directory(package_name, 0700);
+    if (dir_exists(package_name_dir)) {
+        printf("error: the directory `%s` already exists\n", package_name_dir);
+        sdsfree(package_name_dir);
+        return;
+    }
+
+    create_directory(package_name_dir, 0700);
 
     // create our deps folder
-    char *deps_folder = sdsnew(package_name);
-    deps_folder = sdscat(deps_folder, "/" DEPENDENCY_FOLDER_NAME);
+    char *deps_folder = sdsnew(package_name_dir);
+    deps_folder = sdscat(deps_folder, DEPENDENCY_FOLDER_NAME);
     create_directory(deps_folder, 0700);
     sdsfree(deps_folder);
 
     // and the source folder
-    char *src_folder = sdsnew(package_name);
-    src_folder = sdscat(src_folder, "/" SRC_FOLDER_NAME);
+    char *src_folder = sdsnew(package_name_dir);
+    src_folder = sdscat(src_folder, SRC_FOLDER_NAME);
     create_directory(src_folder, 0700);
     sdsfree(src_folder);
 
@@ -74,9 +91,11 @@ void new_action(vector *arguments) {
     // setup git repository
     // TODO dont use system calls
     // but for now it works
-    system("git init");
-    system("git add --all");
-    system("git commit -m \"created new project with arkade!\"");
+    // system("git init");
+    // system("git add --all");
+    // system("git commit -m \"created new project with arkade!\"");
+
+    sdsfree(package_name_dir);
 }
 
 void publish_action(vector *arguments) {
@@ -91,7 +110,7 @@ void publish_action(vector *arguments) {
 void create_config_file(const char *package_name, const char *package_version, const char *package_author, const char *package_author_email) {
     char *config_file_name = sdsnew(package_name);
     config_file_name = sdscat(config_file_name, "/" CONFIG_NAME);
-    
+
     FILE *config_file = create_file(config_file_name);
     fprintf(config_file, "[package]\n");
     fprintf(config_file, "name = %s\n", package_name);
@@ -100,14 +119,14 @@ void create_config_file(const char *package_name, const char *package_version, c
     fprintf(config_file, "\t\"%s <%s>\"\n", package_author, package_author_email);
     fprintf(config_file, "]\n");
     fclose(config_file);
-    
+
     sdsfree(config_file_name);
 }
 
 // WHY IS THIS SO UGLY?
 void create_gitignore_file(const char *package_name) {
     char *gitignore_name = sdsnew(package_name);
-    gitignore_name = sdscat(gitignore_name, "/" CONFIG_NAME);
+    gitignore_name = sdscat(gitignore_name, "/" GITIGNORE_NAME);
 
     FILE *gitignore = create_file(gitignore_name);
     fprintf(gitignore, "_deps/\n");     // dependencies
