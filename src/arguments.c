@@ -5,7 +5,7 @@ static const char *help = {
     "\n"
     "Usage: \n"
     "\tarkade <command> [<args>...]\n"
-    "\tarkage [options]\n"
+    "\tarkade [options]\n"
     "\n"
     "Some common arkade commands are:\n"
     "\tbuild\tCompile the current project\n"
