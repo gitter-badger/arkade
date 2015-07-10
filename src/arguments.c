@@ -35,14 +35,18 @@ void parse_arguments(int argc, char** argv) {
     char *command_arg = argv[1];
     command *cmd = NULL;
     if (hashmap_get(commands, command_arg, (void**) &cmd) == MAP_OK) {
-        // eat all the arguments
-        // todo, handle flags too
-        size_t start = 1;
-        if ((start + cmd->arg_count) - 1 > (size_t) argc) {
+        // check we have enough shit
+        size_t start = 2;
+        
+        // note the 1 + is to account
+        // for the arkade executable name
+        if ((start + cmd->arg_count) >= (size_t) argc) {
             printf("error: not enough arguments for subcommand `%s`\n", cmd->name);
             return;
         }
 
+        // eat all the arguments
+        // todo, handle flags too
         vector *arguments = create_vector();
         for (size_t i = start; i <= start + cmd->arg_count; i++) {
             push_back_item(arguments, argv[i]);
