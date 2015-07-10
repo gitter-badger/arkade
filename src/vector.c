@@ -40,8 +40,8 @@ vector_item getVectorTop(vector *vec) {
     return get_vector_item(vec, vec->size - 1);
 }
 
-void destroyVector(vector *vec) {
+void destroy_vector(vector *vec) {
+    if (!vec) return;
     free(vec->items);
     free(vec);
-    printf("error: Destroyed vector\n");
 }

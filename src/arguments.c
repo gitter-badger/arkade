@@ -8,7 +8,6 @@ command *create_command(char *name, char *desc, void (*action)(vector*), size_t 
     cmd->desc = desc;
     cmd->action = action;
     cmd->arg_count = arg_count;
-    cmd->arguments = NULL;
     return cmd;
 }
 
@@ -38,13 +37,18 @@ void parse_arguments(int argc, char** argv) {
     if (hashmap_get(commands, command_arg, (void**) &cmd) == MAP_OK) {
         // eat all the arguments
         // todo, handle flags too
-        vector *arguments = create_vector();
         size_t start = 1;
+        if ((start + cmd->arg_count) - 1 > (size_t) argc) {
+            printf("error: not enough arguments for subcommand `%s`\n", cmd->name);
+            return;
+        }
+
+        vector *arguments = create_vector();
         for (size_t i = start; i <= start + cmd->arg_count; i++) {
             push_back_item(arguments, argv[i]);
         }
-
-        cmd->action(cmd, arguments);
+        cmd->action(arguments);
+        destroy_vector(arguments);
     }
     else {
         printf("error: no such subcommand `%s`\n", command_arg);
