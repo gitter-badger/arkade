@@ -9,7 +9,8 @@ Not much is required:
 * Git
 
 ## warning
-This is a prototype-ish, it's very messy.
+This is a prototype-ish, it's very messy. Also, because of this
+it probably only works on Unix/Linux based systems.
 
 ## building
 
