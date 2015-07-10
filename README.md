@@ -8,5 +8,13 @@ Not much is required:
 * Clang/GCC
 * Git
 
+# installing
+## build
+
+    $ git clone git@github.com:ark-lang/arkade
+    $ cd arkade
+    $ make
+    $ export PATH=$PATH:~/path/to/arkade/bin
+
 # license
 [MIT](/LICENSE)
