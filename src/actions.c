@@ -115,8 +115,8 @@ void create_config_file(const char *package_name, const char *package_version, c
 
     FILE *config_file = create_file(config_file_name);
     fprintf(config_file, "[package]\n"
-        "name = %s\n"
-        "version = %s\n"
+        "name = \"%s\"\n"
+        "version = \"%s\"\n"
         "authors = [\n"
         "\t\"%s <%s>\"\n"
         "]\n", package_name, package_version, package_author, package_author_email);

@@ -1,15 +1,14 @@
-# arkade
+## arkade
 The package manager for Ark
 
-# requirements
+## requirements
 Not much is required:
 
 * GNU Make
 * Clang/GCC
 * Git
 
-# installing
-## build
+## building
 
 ```bash
 $ git clone git@github.com:ark-lang/arkade
@@ -19,5 +18,5 @@ $ export PATH=$PATH:~/path/to/arkade/bin
 $ arkade new project_name # create a new project
 ```
 
-# license
+## license
 [MIT](/LICENSE)
