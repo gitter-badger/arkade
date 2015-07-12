@@ -47,13 +47,13 @@ static FILE *create_file(const char *name) {
     return handle;
 }
 
-void help_action(vector *arguments) {
+void help_action(vector_t *arguments) {
     // todo we can iterate through our
     // command/args list?
     printf("%s", help);
 }
 
-void new_action(vector *arguments) {
+void new_action(vector_t *arguments) {
     // some default information
     const char *package_name = get_vector_item(arguments, 0);
     const char *package_author = "John Terry";
@@ -91,17 +91,12 @@ void new_action(vector *arguments) {
     create_config_file(package_name, package_author, package_version, package_author_email);
     create_gitignore_file(package_name);
 
-    // setup git repository
-    // TODO dont use system calls
-    // but for now it works
-    // system("git init");
-    // system("git add --all");
-    // system("git commit -m \"created new project with arkade!\"");
+    // init git repo
 
     sdsfree(package_name_dir);
 }
 
-void publish_action(vector *arguments) {
+void publish_action(vector_t *arguments) {
     CURL *curl;
     curl = curl_easy_init();
     if (!curl) {
@@ -150,7 +145,7 @@ void publish_action(vector *arguments) {
     sdsfree(add_remote);
 }
 
-void build_action(vector *arguments) {
+void build_action(vector_t *arguments) {
     // lol
     // todo make this nicer
     system("mkdir -p bin/");

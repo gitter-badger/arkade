@@ -2,8 +2,8 @@
 
 static map_t *commands;
 
-command *create_command(char *name, char *desc, void (*action)(vector*), size_t arg_count) {
-    command *cmd = malloc(sizeof(*cmd));
+command_t *create_command(char *name, char *desc, void (*action)(vector_t*), size_t arg_count) {
+    command_t *cmd = malloc(sizeof(*cmd));
     cmd->name = name;
     cmd->desc = desc;
     cmd->action = action;
@@ -11,7 +11,7 @@ command *create_command(char *name, char *desc, void (*action)(vector*), size_t 
     return cmd;
 }
 
-void destroy_command(command *cmd) {
+void destroy_command(command_t *cmd) {
     free(cmd);
 }
 
@@ -34,7 +34,7 @@ void parse_arguments(int argc, char** argv) {
     hashmap_put(commands, "build", create_command("build", "Compiles the current ark project", &build_action, 0));
 
     char *command_arg = argv[1];
-    command *cmd = NULL;
+    command_t *cmd = NULL;
     if (hashmap_get(commands, command_arg, (void**) &cmd) == MAP_OK) {
         // check we have enough shit
         size_t start = 2;
@@ -48,7 +48,7 @@ void parse_arguments(int argc, char** argv) {
 
         // eat all the arguments
         // todo, handle flags too
-        vector *arguments = create_vector();
+        vector_t *arguments = create_vector();
         for (size_t i = start; i <= start + cmd->arg_count; i++) {
             push_back_item(arguments, argv[i]);
         }

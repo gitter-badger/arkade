@@ -1,14 +1,14 @@
 #include "vector.h"
 
-vector *create_vector() {
-    vector *vec = malloc(sizeof(*vec));
+vector_t *create_vector() {
+    vector_t *vec = malloc(sizeof(*vec));
     vec->size = 0;
     vec->max_size = 2;
     vec->items = malloc(sizeof(*vec->items) * vec->max_size);
     return vec;
 }
 
-void push_back_item(vector *vec, vector_item item) {
+void push_back_item(vector_t *vec, vector_item item) {
     if (vec) {
         // much more efficient to reallocate exponentially,
         // instead of reallocating after adding an item
@@ -28,7 +28,7 @@ void push_back_item(vector *vec, vector_item item) {
     }
 }
 
-vector_item get_vector_item(vector *vec, int index) {
+vector_item get_vector_item(vector_t *vec, int index) {
     if (index > vec->size) {
         printf("error: index out of vector bounds, index: %d, size: %d\n", index, vec->size);
         return false;
@@ -36,11 +36,11 @@ vector_item get_vector_item(vector *vec, int index) {
     return vec->items[index];
 }
 
-vector_item getVectorTop(vector *vec) {
+vector_item getVectorTop(vector_t *vec) {
     return get_vector_item(vec, vec->size - 1);
 }
 
-void destroy_vector(vector *vec) {
+void destroy_vector(vector_t *vec) {
     if (!vec) return;
     free(vec->items);
     free(vec);

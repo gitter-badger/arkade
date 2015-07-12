@@ -1,14 +1,14 @@
 #include "lexer.h"
 
-toml_lexer *create_lexer(vector *files) {
-    toml_lexer *self = malloc(sizeof(*self));
+lexer_t *create_lexer(vector_t *files) {
+    lexer_t *self = malloc(sizeof(*self));
     self->sourcefiles = files;
     return self;   
 }
 
-void start_lexing(toml_lexer *self) {
+void start_lexing(lexer_t *self) {
     for (int i = 0; i < self->sourcefiles->size; i++) {
-        sourcefile *file = get_vector_item(self->sourcefiles, i);
+        sourcefile_t *file = get_vector_item(self->sourcefiles, i);
         
         // a lot of shit needs to be reset...
         self->tokens = file->tokens;
@@ -29,14 +29,14 @@ void start_lexing(toml_lexer *self) {
     }
 }
 
-void consume(toml_lexer *self) {
+void consume(lexer_t *self) {
     if (self->current_position + 1 >= self->input_length) {
         self->running = false;
     }
     self->current_character = self->input[++self->current_position];
 }
 
-void eat_layout(toml_lexer *self) {
+void eat_layout(lexer_t *self) {
     while (self->current_character <= ' ' 
         || self->current_character == '\n'
         || self->current_character == '\t') {
@@ -44,7 +44,7 @@ void eat_layout(toml_lexer *self) {
     }
 }
 
-void push_token(toml_lexer *self, int type) {
+void push_token(lexer_t *self, int type) {
     int token_length = (self->current_position - self->initial_position) + 1;
 
     char *contents = malloc(sizeof(char) * token_length);
@@ -53,12 +53,12 @@ void push_token(toml_lexer *self, int type) {
         contents[token_length - 1] = 0;
     }
 
-    token *tok = create_token(contents, self->current_sourcefile, 
+    token_t *tok = create_token(contents, self->current_sourcefile, 
         self->initial_position, self->current_position, type);
     push_back_item(self->tokens, tok);
 }
 
-void recognize_identifier(toml_lexer *self) {
+void recognize_identifier(lexer_t *self) {
     while (is_identifier(self->current_character)) {
         consume(self);
     }
@@ -66,7 +66,7 @@ void recognize_identifier(toml_lexer *self) {
     push_token(self, TOKEN_IDENTIFIER);
 }
 
-void recognize_digit(toml_lexer *self) {
+void recognize_digit(lexer_t *self) {
     while (is_digit(self->current_character)) {
         consume(self);
     }
@@ -83,24 +83,24 @@ void recognize_digit(toml_lexer *self) {
     }
 }
 
-void recognize_operator(toml_lexer *self) {
+void recognize_operator(lexer_t *self) {
     consume(self);
     push_token(self, TOKEN_OPERATOR);
 }
 
-void recognize_separator(toml_lexer *self) {
+void recognize_separator(lexer_t *self) {
     consume(self);
     push_token(self, TOKEN_SEPARATOR);
 }
 
-void recognize_comment(toml_lexer *self) {
+void recognize_comment(lexer_t *self) {
     // eat all characters till the newline
     while (self->current_character != '\n') {
         consume(self);
     }
 }
 
-void recognize_string(toml_lexer *self) {
+void recognize_string(lexer_t *self) {
     consume(self); // eat opening quote
     while (self->current_character != '"') {
         consume(self); // eat contents of quote
@@ -110,7 +110,7 @@ void recognize_string(toml_lexer *self) {
     push_token(self, TOKEN_STRING);
 }
 
-void get_next_token(toml_lexer *self) {
+void get_next_token(lexer_t *self) {
     eat_layout(self);
     self->initial_position = self->current_position;
 
@@ -142,6 +142,6 @@ void get_next_token(toml_lexer *self) {
     }
 }
 
-void destroy_lexer(toml_lexer *self) {
+void destroy_lexer(lexer_t *self) {
     free(self);
 }
