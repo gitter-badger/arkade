@@ -4,6 +4,7 @@ The package manager for Ark
 ## requirements
 Not much is required:
 
+* CMake
 * GNU Make
 * Clang/GCC
 * Git
