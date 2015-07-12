@@ -11,5 +11,6 @@ token_t *create_token(char *contents, sourcefile_t *owner, int start, int end, i
 }
 
 void destroy_token(token_t *self) {
+    sdsfree(self->contents);
     free(self);
 }

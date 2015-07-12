@@ -19,11 +19,13 @@ typedef struct {
 // EXPRESSIONS
 
 typedef struct {
-
+    vector_t *values;
+    int value_count;
 } array_t;
 
 typedef struct {
-
+    char *name;
+    vector_t *values;
 } inline_table_t;
 
 typedef enum {
@@ -77,16 +79,16 @@ typedef struct {
     vector_t *nodes;
 } array_table_t;
 
-/*
-    This is a top level node, it can either be
-    a table, array of tables, or a key
-*/
 typedef enum {
     TABLE_NODE,
     ARRAY_TABLE_NODE,
     KEY_NODE
 } node_type;
 
+/*
+    This is a top level node, it can either be
+    a table, array of tables, or a key
+*/
 typedef struct {
     node_type kind;
     void *data;

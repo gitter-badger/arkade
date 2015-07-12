@@ -9,6 +9,7 @@
 #include "vector.h"
 #include "sourcefile.h"
 #include "token.h"
+#include "sds.h"
 
 typedef struct {
     vector_t *sourcefiles;
@@ -44,6 +45,10 @@ void recognize_separator(lexer_t *self);
 void get_next_token(lexer_t *self);
 
 void destroy_lexer(lexer_t *lexer);
+
+static inline bool is_eoi(char c) {
+    return c == '\0';
+}
 
 static inline bool is_letter(char c) {
     return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
