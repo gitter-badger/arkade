@@ -3,6 +3,16 @@
 #include "arguments.h"
 #include "toml.h"
 
+static const char* TOKEN_TYPE[] = {
+    "TOKEN_IDENTIFIER",
+    "TOKEN_WHOLE",
+    "TOKEN_FLOATING",
+    "TOKEN_OPERATOR",
+    "TOKEN_SEPARATOR",
+    "TOKEN_STRING",
+    "TOKEN_EOF"
+};
+
 int main(int argc, char **argv) {
     parse_arguments(argc, argv);
 
@@ -21,7 +31,7 @@ int main(int argc, char **argv) {
         sourcefile *file = get_vector_item(files, i);
         for (int i = 0; i < file->tokens->size; i++) {
             token *tok = get_vector_item(file->tokens, i);
-            printf("%d: %s\n", tok->type, tok->contents);
+            printf("%s: %s\n", TOKEN_TYPE[tok->type], tok->contents);
         }
 
         destroy_sourcefile(file);

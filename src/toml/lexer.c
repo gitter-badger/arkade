@@ -74,6 +74,7 @@ void recognize_digit(toml_lexer *self) {
     }
 
     if (self->current_character == '.') {
+        consume(self);
         while (is_digit(self->current_character)) {
             consume(self);
         }
@@ -123,11 +124,11 @@ void get_next_token(toml_lexer *self) {
             return;
         }
         default: {
-            if (is_identifier(self->current_character)) {
-                recognize_identifier(self);
-            }
-            else if (is_digit(self->current_character)) {
+            if (is_digit(self->current_character)) {
                 recognize_digit(self);
+            }
+            else if (is_identifier(self->current_character)) {
+                recognize_identifier(self);
             }
             else if (is_operator(self->current_character)) {
                 recognize_operator(self);
