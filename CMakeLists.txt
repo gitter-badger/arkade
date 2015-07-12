@@ -8,8 +8,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "bin/")
 include_directories(includes includes/toml)
 
 file(GLOB SOURCES src/*.c src/toml/*.c)
-file(GLOB HEADERS includes/*.h includes/toml/*.h)
 
-add_executable(arkade ${SOURCES} ${HEADERS})
+add_executable(arkade ${SOURCES})
 
 target_link_libraries(arkade curl)
