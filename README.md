@@ -1,10 +1,6 @@
 ## arkade
 The package manager for Ark
 
-## gifs are cool
-webms are better
-![yo](http://cdn.felixangell.com/gifs/arkade-example.gif)
-
 ## requirements
 Not much is required:
 
