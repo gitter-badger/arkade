@@ -101,31 +101,45 @@ void recognize_comment(toml_lexer *self) {
     }
 }
 
+void recognize_string(toml_lexer *self) {
+    consume(self); // eat opening quote
+    while (self->current_character != '"') {
+        consume(self); // eat contents of quote
+    }
+    consume(self); // eat closing quote
+
+    push_token(self, TOKEN_STRING);
+}
+
 void get_next_token(toml_lexer *self) {
     eat_layout(self);
     self->initial_position = self->current_position;
 
-    if (self->current_character == '\0') {
-        self->running = false;
-        return;
-    }
-    else if (is_identifier(self->current_character)) {
-        recognize_identifier(self);
-    }
-    else if (is_digit(self->current_character)) {
-        recognize_digit(self);
-    }
-    else if (is_operator(self->current_character)) {
-        recognize_operator(self);
-    }
-    else if (is_separator(self->current_character)) {
-        recognize_separator(self);
-    }
-    else if (self->current_character == '#') {
-        recognize_comment(self);
-    }
-    else {
-        printf("WHAT YEAR IS IT? %c\n", self->current_character);
+    switch (self->current_character) {
+        case '#': recognize_comment(self); break;
+        case '"': recognize_string(self); break;
+        case '\0': {
+            self->running = false;
+            return;
+        }
+        default: {
+            if (is_identifier(self->current_character)) {
+                recognize_identifier(self);
+            }
+            else if (is_digit(self->current_character)) {
+                recognize_digit(self);
+            }
+            else if (is_operator(self->current_character)) {
+                recognize_operator(self);
+            }
+            else if (is_separator(self->current_character)) {
+                recognize_separator(self);
+            }
+            else {
+                printf("WHAT YEAR IS IT? %c\n", self->current_character);
+            }
+            break;
+        }
     }
 }
 

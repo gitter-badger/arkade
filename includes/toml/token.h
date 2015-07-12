@@ -11,6 +11,7 @@ typedef enum {
     TOKEN_FLOATING,
     TOKEN_OPERATOR,
     TOKEN_SEPARATOR,
+    TOKEN_STRING,
     TOKEN_EOF
 } token_type;
 
