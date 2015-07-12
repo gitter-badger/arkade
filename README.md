@@ -1,23 +1,20 @@
-## arkade
+## Arkade
 The package manager for Ark
 
-## requirements
-Not much is required:
-
+## Requirements
 * CMake
 * GNU Make
-* Clang/GCC
-* Git
+* A C compiler like Clang or GCC
+* Curl
 
 ## warning
 This is a prototype-ish, it's very messy. Also, because of this
 it probably only works on Unix/Linux based systems.
 
-### also...
-the TOML parser is written by me, and it **doesn't** support UTF-8
+The TOML parser is written by me, and it **doesn't** support UTF-8
 and it probably wont till it is re-written in Ark.
 
-## building
+## Building
 
 ```bash
 $ git clone git@github.com:ark-lang/arkade
@@ -28,5 +25,5 @@ $ export PATH=$PATH:~/path/to/arkade/bin
 $ arkade new project_name # create a new project
 ```
 
-## license
+## License
 [MIT](/LICENSE)
