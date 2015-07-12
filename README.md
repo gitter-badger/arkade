@@ -12,6 +12,10 @@ Not much is required:
 This is a prototype-ish, it's very messy. Also, because of this
 it probably only works on Unix/Linux based systems.
 
+### also...
+the TOML parser is written by me, and it **doesn't** support UTF-8
+and it probably wont till it is re-written in Ark.
+
 ## building
 
 ```bash

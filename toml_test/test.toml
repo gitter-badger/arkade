@@ -1,0 +1,35 @@
+title = "Example"
+
+[database]
+# comment
+server = "192.168.0.1"
+ports = [80, 8080, 443]
+max_connections = 5000
+enabled = true
+
+    [database.child]
+    ip = "8.8.8.8"
+
+# comment
+# another comment
+
+array = [ # comment!!
+    "one", # yo
+    "two" #abc
+]
+
+# asdsdf
+a = +99 #ok
+b = 42 #hi
+c = 0
+d = -21
+e = 1.1123123
+f = true
+g = false
+
+[[array_of_tables]]
+name = "Felix"
+Age = "17"
+Gender = "Male"
+ThreeCommaClubMember = true
+
