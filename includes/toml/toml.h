@@ -9,7 +9,9 @@ typedef struct {
     vector *files;
 } toml;
 
-toml *parse_toml(vector *files);
+toml *parse_toml();
+
+void start_parsing_toml(toml *toml, vector *files);
 
 void destroy_toml(toml *toml);
 

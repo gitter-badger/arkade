@@ -1,15 +1,16 @@
 #include "toml.h"
 
-toml *parse_toml(vector *files) {
-    toml *toml = malloc(sizeof(*toml));
+toml *parse_toml() {
+    return malloc(sizeof(toml));
+}
+
+void start_parsing_toml(toml *toml, vector *files) {
     toml->files = files;
-    return toml;
+    toml->lex = create_lexer(toml->files);
+    start_lexing(toml->lex);
 }
 
 void destroy_toml(toml *toml) {
-    for (int i = 0; i < toml->files->size; i++) {
-        destroy_sourcefile(get_vector_item(toml->files, i));
-    }
-    destroy_vector(toml->files);
+    destroy_lexer(toml->lex);
     free(toml);
 }

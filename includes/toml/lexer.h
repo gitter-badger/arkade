@@ -23,7 +23,7 @@ typedef struct {
     char current_character;
 } toml_lexer;
 
-toml_lexer *create_lexer();
+toml_lexer *create_lexer(vector *files);
 
 void start_lexing(toml_lexer *self);
 

@@ -94,6 +94,13 @@ void recognize_separator(toml_lexer *self) {
     push_token(self, TOKEN_SEPARATOR);
 }
 
+void recognize_comment(toml_lexer *self) {
+    // eat all characters till the newline
+    while (self->current_character != '\n') {
+        consume(self);
+    }
+}
+
 void get_next_token(toml_lexer *self) {
     eat_layout(self);
     self->initial_position = self->current_position;
@@ -113,6 +120,9 @@ void get_next_token(toml_lexer *self) {
     }
     else if (is_separator(self->current_character)) {
         recognize_separator(self);
+    }
+    else if (self->current_character == '#') {
+        recognize_comment(self);
     }
     else {
         printf("WHAT YEAR IS IT? %c\n", self->current_character);
