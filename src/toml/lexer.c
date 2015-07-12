@@ -6,15 +6,6 @@ toml_lexer *create_lexer(vector *files) {
     return self;   
 }
 
-static void consume(toml_lexer *self) {
-    // prepare yourself for the end...
-    if (self->current_position + 1 >= self->input_length) {
-        self->running = false;
-    }
-
-    self->current_character = self->input[++self->current_position];
-}
-
 void start_lexing(toml_lexer *self) {
     for (int i = 0; i < self->sourcefiles->size; i++) {
         sourcefile *file = get_vector_item(self->sourcefiles, i);
@@ -36,6 +27,13 @@ void start_lexing(toml_lexer *self) {
         // once we're done, add an EOF token
         push_token(self, TOKEN_EOF);
     }
+}
+
+void consume(toml_lexer *self) {
+    if (self->current_position + 1 >= self->input_length) {
+        self->running = false;
+    }
+    self->current_character = self->input[++self->current_position];
 }
 
 void eat_layout(toml_lexer *self) {
@@ -119,7 +117,7 @@ void get_next_token(toml_lexer *self) {
     switch (self->current_character) {
         case '#': recognize_comment(self); break;
         case '"': recognize_string(self); break;
-        case '\0': {
+        case '\0': { // EOF 
             self->running = false;
             return;
         }

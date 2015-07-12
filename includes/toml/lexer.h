@@ -25,6 +25,8 @@ typedef struct {
 
 toml_lexer *create_lexer(vector *files);
 
+void consume(toml_lexer *self);
+
 void start_lexing(toml_lexer *self);
 
 void eat_layout(toml_lexer *self);
