@@ -21,6 +21,7 @@ and it probably wont till it is re-written in Ark.
 ```bash
 $ git clone git@github.com:ark-lang/arkade
 $ cd arkade
+$ cmake CMakeLists.txt
 $ make
 $ export PATH=$PATH:~/path/to/arkade/bin
 $ arkade new project_name # create a new project
