@@ -59,8 +59,7 @@ void destroy_sourcefile(sourcefile_t *self) {
     destroy_vector(self->ast);
 
     for (int i = 0; i < self->tokens->size; i++) {
-        token_t *tok = get_vector_item(self->tokens, i);
-        free(tok);
+        destroy_token(get_vector_item(self->tokens, i));
     }
     destroy_vector(self->tokens);
     free(self);
