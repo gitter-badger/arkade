@@ -102,8 +102,10 @@ void recognize_comment(lexer_t *self) {
 
 void recognize_string(lexer_t *self) {
     consume(self); // eat opening quote
-    while (self->current_character != '"') {
+    while (true) {
+        char previous_char = self->current_character;
         consume(self); // eat contents of quote
+        if (self->current_character == '"' && previous_char != '\\') break;
     }
     consume(self); // eat closing quote
 
