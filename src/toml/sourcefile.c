@@ -1,8 +1,8 @@
 #include "sourcefile.h"
 #include "token.h"
 
-sourcefile *create_sourcefile(char *location) {
-    sourcefile *self = malloc(sizeof(*self));
+sourcefile_t *create_sourcefile(char *location) {
+    sourcefile_t *self = malloc(sizeof(*self));
     self->location = location;
     self->name = basename(location);
     self->tokens = create_vector();
@@ -11,7 +11,7 @@ sourcefile *create_sourcefile(char *location) {
     return self;
 }
 
-char *read_file(sourcefile *file) {
+char *read_file(sourcefile_t *file) {
     FILE *file_handle = fopen(file->location, "r");
     if (!file_handle) {
         perror("fopen: could not read file");
@@ -53,13 +53,13 @@ char *read_file(sourcefile *file) {
     return contents;
 }
 
-void destroy_sourcefile(sourcefile *self) {
+void destroy_sourcefile(sourcefile_t *self) {
     free(self->contents);
 
     destroy_vector(self->ast);
 
     for (int i = 0; i < self->tokens->size; i++) {
-        token *tok = get_vector_item(self->tokens, i);
+        token_t *tok = get_vector_item(self->tokens, i);
         free(tok->contents);
         free(tok);
     }

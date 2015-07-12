@@ -17,13 +17,13 @@ typedef enum {
 
 typedef struct {
     char *contents;
-    sourcefile *owner;
+    sourcefile_t *owner;
     int start, end;
     int type;
-} token;
+} token_t;
 
-token *create_token(char *contents, sourcefile *owner, int start, int end, int token_type);
+token_t *create_token(char *contents, sourcefile_t *owner, int start, int end, int token_type);
 
-void destroy_token(token *self);
+void destroy_token(token_t *self);
 
 #endif // __TOKEN_H

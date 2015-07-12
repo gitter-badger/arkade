@@ -1,7 +1,7 @@
 #include "token.h"
 
-token *create_token(char *contents, sourcefile *owner, int start, int end, int type) {
-    token *self = malloc(sizeof(*self));
+token_t *create_token(char *contents, sourcefile_t *owner, int start, int end, int type) {
+    token_t *self = malloc(sizeof(*self));
     self->contents = contents;
     self->owner = owner;
     self->start = start;
@@ -10,6 +10,6 @@ token *create_token(char *contents, sourcefile *owner, int start, int end, int t
     return self;
 }
 
-void destroy_token(token *self) {
+void destroy_token(token_t *self) {
     free(self);
 }

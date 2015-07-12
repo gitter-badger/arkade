@@ -11,14 +11,14 @@ typedef struct {
     char *name;
     char *location;
     char *contents;
-    vector *tokens;
-    vector *ast;
-} sourcefile;
+    vector_t *tokens;
+    vector_t *ast;
+} sourcefile_t;
 
-sourcefile *create_sourcefile(char *location);
+sourcefile_t *create_sourcefile(char *location);
 
-char *read_file(sourcefile *file);
+char *read_file(sourcefile_t *file);
 
-void destroy_sourcefile(sourcefile *self);
+void destroy_sourcefile(sourcefile_t *self);
 
 #endif // __SOURCEFILE_H

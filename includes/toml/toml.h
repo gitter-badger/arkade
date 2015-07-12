@@ -5,14 +5,14 @@
 #include "vector.h"
 
 typedef struct {
-    toml_lexer *lex;
-    vector *files;
-} toml;
+    lexer_t *lex;
+    vector_t *files;
+} toml_t;
 
-toml *parse_toml();
+toml_t *create_toml();
 
-void start_parsing_toml(toml *toml, vector *files);
+void start_parsing_toml(toml_t *toml, vector_t *files);
 
-void destroy_toml(toml *toml);
+void destroy_toml(toml_t *toml);
 
 #endif // __TOML_H

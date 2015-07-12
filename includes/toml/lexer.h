@@ -11,8 +11,8 @@
 #include "token.h"
 
 typedef struct {
-    vector *sourcefiles;
-    vector *tokens;
+    vector_t *sourcefiles;
+    vector_t *tokens;
     void *current_sourcefile;
 
     char *input;
@@ -21,29 +21,29 @@ typedef struct {
     int initial_position;
     int current_position;
     char current_character;
-} toml_lexer;
+} lexer_t;
 
-toml_lexer *create_lexer(vector *files);
+lexer_t *create_lexer(vector_t *files);
 
-void consume(toml_lexer *self);
+void consume(lexer_t *self);
 
-void start_lexing(toml_lexer *self);
+void start_lexing(lexer_t *self);
 
-void eat_layout(toml_lexer *self);
+void eat_layout(lexer_t *self);
 
-void push_token(toml_lexer *self, int type);
+void push_token(lexer_t *self, int type);
 
-void recognize_identifier(toml_lexer *self);
+void recognize_identifier(lexer_t *self);
 
-void recognize_digit(toml_lexer *self);
+void recognize_digit(lexer_t *self);
 
-void recognize_operator(toml_lexer *self);
+void recognize_operator(lexer_t *self);
 
-void recognize_separator(toml_lexer *self);
+void recognize_separator(lexer_t *self);
 
-void get_next_token(toml_lexer *self);
+void get_next_token(lexer_t *self);
 
-void destroy_lexer(toml_lexer *lexer);
+void destroy_lexer(lexer_t *lexer);
 
 static inline bool is_letter(char c) {
     return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');

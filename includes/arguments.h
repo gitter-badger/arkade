@@ -11,21 +11,21 @@
 typedef struct {
     char *name;
     char *desc;
-    void (*action)(vector*);
-    vector *arguments;
+    void (*action)(vector_t*);
+    vector_t *arguments;
     size_t arg_count;
-} command;
+} command_t;
 
 typedef struct {
-    command *parent;
+    command_t *parent;
     char *name;
     char *desc;
     void (*action)(void);
-} flag;
+} flag_t;
 
-command *create_command(char *name, char *desc, void (*action)(vector*), size_t arg_count);
+command_t *create_command(char *name, char *desc, void (*action)(vector_t*), size_t arg_count);
 
-void destroy_command(command *cmd);
+void destroy_command(command_t *cmd);
 
 int destroy_commands(any_t __attribute__((unused)) passed_data, any_t item);
 
