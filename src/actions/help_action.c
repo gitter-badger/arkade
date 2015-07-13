@@ -10,11 +10,14 @@ static const char* help_template = {
 
 int print_command(any_t data, any_t item) {
     command_t *command = item;
-    #ifdef _WIN32
+
+// windows is shit and doesn't
+// support magical bolding
+#ifdef _WIN32
     printf("    %-10s %s\n", command->name, command->desc);
-    #else
+#else
     printf("    \033[1m%-10s\033[0m %s\n", command->name, command->desc);
-    #endif
+#endif
 
     return MAP_OK;
 }
