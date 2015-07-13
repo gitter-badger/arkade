@@ -3,6 +3,7 @@
 # is for in this case
 
 [package]
+name = "felix"
 authors = [
     "Felix Angell <mail@felixangell.com>"
 ]

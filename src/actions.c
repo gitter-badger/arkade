@@ -14,39 +14,6 @@ static const char *help = {
     "\n"
 };
 
-static bool dir_exists(const char *path) {
-    struct stat st;
-    if (stat(path, &st) == -1) {
-        return false;
-    }
-    return true;
-}
-
-static void create_directory(const char *path, int mode) {
-    if (!dir_exists(path)) {
-        mkdir(path, mode);
-    } else {
-        printf("error: `%s` directory already exists\n", path);
-        return;
-    }
-}
-
-static FILE *create_file(const char *name) {
-    FILE *handle = fopen(name, "rb+");
-    if (!handle) {
-        handle = fopen(name, "wb");
-        if (!handle) {
-            printf("error: could not create file `%s`\n", name);
-            return false;
-        }
-    } 
-    else {
-        printf("error: could not create file since it exists `%s`\n", name);
-        return false;
-    }
-    return handle;
-}
-
 void help_action(vector_t *arguments) {
     // todo we can iterate through our
     // command/args list?
@@ -104,10 +71,24 @@ void publish_action(vector_t *arguments) {
         return;
     }
 
-    // just assume this for now lol
-    const char *username = "felixangell";
-    const char *reponame = "test";
+    load_t *token_loader = create_loader(create_sourcefile("~/.arkade/config.toml"));
+    table_t *config = get_table(token_loader, "config");
+
+    char cwd[1024];
+    if (getcwd(cwd, sizeof(cwd))) {
+        printf("current directory is %s\n", cwd);
+    }
     
+    load_t *config_loader = create_loader(create_sourcefile("Ark.toml"));
+    table_t *package = get_table(config_loader, "package");
+
+    char *username = get_string("user", package);
+    char *reponame = get_string("name", package);
+    char *token = get_string("token", config);
+    char *auth_user = sdsnew(username);
+    auth_user = sdscat(auth_user, ":");
+    auth_user = sdscat(auth_user, token);
+
     // TODO JSON builder, then we can easily
     // add properties from the TOML file too.
     char *request = sdsnew("{\"name\": \"");
@@ -116,13 +97,14 @@ void publish_action(vector_t *arguments) {
 
     struct curl_slist *headers = NULL;
     headers = curl_slist_append(headers, "Accept: application/json");
-    headers = curl_slist_append(headers, "User-Agent: arkade");\
+    headers = curl_slist_append(headers, "User-Agent: arkade");
     curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
     
     curl_easy_setopt(curl, CURLOPT_VERBOSE, 1);
     curl_easy_setopt(curl, CURLOPT_URL, "https://api.github.com/user/repos");
     curl_easy_setopt(curl, CURLOPT_POST, 1);
     curl_easy_setopt(curl, CURLOPT_POSTFIELDS, request);
+    curl_easy_setopt(curl, CURLOPT_USERPWD, auth_user);
 
     curl_easy_perform(curl);
     curl_easy_cleanup(curl);
@@ -150,6 +132,32 @@ void build_action(vector_t *arguments) {
     // todo make this nicer
     system("mkdir -p bin/");
     system("ark build src/*.ark -o bin/main");
+}
+
+void login_action(vector_t *arguments) {
+    char *token = get_vector_item(arguments, 0);
+
+    sds path = sdsnew(getenv("HOME"));
+    path = sdscat(path, "/.arkade");
+
+    if (!dir_exists(path)) {
+        create_directory(path, 0700);
+    }
+
+    sds config_file_path = sdsnew(path);
+    config_file_path = sdscat(config_file_path, "/config.toml");
+    if (dir_exists(config_file_path)) {
+        printf("woah buddy, looks like you've already setup your token!\n");
+    }
+    else {
+        FILE *config = create_file(config_file_path);
+        fprintf(config, "[config]\n"
+                        "token = \"%s\"\n", token);
+        fclose(config);
+    }
+
+    sdsfree(config_file_path);
+    sdsfree(path);
 }
 
 void create_config_file(const char *package_name, const char *package_version, const char *package_author, const char *package_author_email) {
