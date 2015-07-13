@@ -17,6 +17,30 @@ bare_key_t *parse_key(parser_t *parser) {
 }
 
 array_table_t *parse_array_table(parser_t *parser) {
+    if (!match_token(parser, "[", TOKEN_SEPARATOR, 0) &&
+        !match_token(parser, "[", TOKEN_SEPARATOR, 1)) {
+        return false;
+    }
+
+    // we already know what the tokens are
+    consume(parser);
+    consume(parser);
+
+    if (match_token(parser, "", TOKEN_IDENTIFIER, 0)) {
+        char *array_table_name = consume(parser)->contents;
+        if (!match_token(parser, "]", TOKEN_SEPARATOR, 0) &&
+            !match_token(parser, "]", TOKEN_SEPARATOR, 1)) {
+            printf("error: expected closing brackets for `%s`\n", array_table_name);
+            return false;    
+        }
+        consume(parser);
+        consume(parser);
+
+        vector_t *nodes = create_vector();
+        array_table_t *array_table = create_array_table(array_table_name, nodes);
+        return array_table;
+    }
+
     return false;
 }
 
@@ -49,6 +73,11 @@ node_t *parse_node(parser_t *parser) {
     table_t *table = parse_table(parser);
     if (table) {
         return create_node(TABLE_NODE, table);
+    }
+
+    array_table_t *array_table = parse_array_table(parser);
+    if (array_table) {
+        return create_node(ARRAY_TABLE_NODE, array_table);
     }
 
     return false;
