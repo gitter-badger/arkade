@@ -20,9 +20,11 @@ literal_t *parse_literal(parser_t *parser) {
         case TOKEN_WHOLE: case TOKEN_FLOATING: 
             return create_literal(NUMBER_LITERAL, consume(parser)->contents);
         default:
-            if (!strcmp(current->contents, "true")
-                || !strcmp(current->contents, "false")) {
-                return create_literal(BOOLEAN_LITERAL, consume(parser)->contents);
+            if (!strcmp(current->contents, "true")) {
+                return create_literal(BOOLEAN_TRUE_LITERAL, consume(parser)->contents);
+            }
+            else if (!strcmp(current->contents, "false")) {
+                return create_literal(BOOLEAN_FALSE_LITERAL, consume(parser)->contents);
             }
             return false;
     }

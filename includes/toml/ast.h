@@ -11,7 +11,8 @@ typedef enum {
     NUMBER_LITERAL,
     STRING_LITERAL,
     CHARACTER_LITERAL,
-    BOOLEAN_LITERAL
+    BOOLEAN_TRUE_LITERAL,
+    BOOLEAN_FALSE_LITERAL
 } literal_type;
 
 typedef struct {
