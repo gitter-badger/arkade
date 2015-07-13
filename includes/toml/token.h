@@ -3,6 +3,7 @@
 
 #include <stdlib.h>
 
+#include "sds.h"
 #include "sourcefile.h"
 
 typedef enum {

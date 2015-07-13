@@ -1,37 +1,12 @@
-title = "Example"
+# this is a more realistic test
+# in terms of what the TOML parser
+# is for in this case
 
-[database]
-# comment
-server = "192.168.0.1"
-ports = [80, 8080, 443]
-max_connections = 5000
-enabled = true
-
-    [database.child]
-    ip = "8.8.8.8"
-
-# comment
-# another comment
-
-array = [ # comment!!
-    "one", # yo
-    "two" #abc
-]
-
-# asdsdf
-a = +99 #ok
-b = 42 #hi
-c = 0
-d = -21
-e = 1.1123123
-f = true
-g = false
+[package]
+name = "My Big Package ;)"
+version = "0.0.1"
+# authors = [
+#     "Felix Angell <mail@felixangell.com>"
+# ]
 
 [[array_of_tables]]
-name = "Felix"
-Age = "17"
-Gender = "Male"
-ThreeCommaClubMember = true
-
-
-

@@ -15,7 +15,10 @@ The TOML parser is written by me, and it **doesn't** support UTF-8 and it probab
 ## Why are we writing this in C?
 We're planning to write the package manager *in* Ark, but, because the language doesn't work good enough yet to suit the needs of a package manager, we're using C.
 
-It is easier to convert C to Ark than for example Go to Ark.
+It is also easier to convert C to Ark than for example Go to Ark. We are also writing
+most of the utilities we need for this, e.g. a TOML parser, JSON builder, etc. from scratch.
+This will also make the port a lot more easier, since we wont have to port any huge libraries
+over (e.g. a TOML parser that uses some huge parser/lexer generator), and this will keep the package manager more lightweight.
 
 ## Building
 
@@ -26,6 +29,8 @@ $ cmake CMakeLists.txt
 $ make
 $ export PATH=$PATH:~/path/to/arkade/bin
 $ arkade new project_name # create a new project
+$ cd project_name
+$ arkade build
 ```
 
 ## License

@@ -23,34 +23,36 @@ void start_lexing(lexer_t *self) {
         while (self->running) {
             get_next_token(self);
         }
-
-        // once we're done, add an EOF token
-        push_token(self, TOKEN_EOF);
     }
 }
 
-void consume(lexer_t *self) {
-    if (self->current_position + 1 >= self->input_length) {
-        self->running = false;
+static void consume(lexer_t *self) {
+    if ((self->current_position > self->input_length) 
+        || is_eoi(self->current_character)) {
+        printf("EOI `%d`\n", self->current_character);
+        return;
     }
+
     self->current_character = self->input[++self->current_position];
 }
 
 void eat_layout(lexer_t *self) {
-    while (self->current_character <= ' ' 
+    while ((self->current_character <= ' ' 
         || self->current_character == '\n'
-        || self->current_character == '\t') {
+        || self->current_character == '\t')
+        && self->current_character != '\0') {
         consume(self);
     }
 }
 
 void push_token(lexer_t *self, int type) {
-    int token_length = (self->current_position - self->initial_position) + 1;
-
-    char *contents = malloc(sizeof(char) * token_length);
+    sds contents = NULL;
     if (type != TOKEN_EOF) {
-        memcpy(contents, &self->input[self->initial_position], token_length);
-        contents[token_length - 1] = 0;
+        int length = self->current_position - self->initial_position;
+        contents = sdsnewlen(&self->input[self->initial_position], length);
+    }
+    else {
+        contents = sdsnew("lol this is eof");
     }
 
     token_t *tok = create_token(contents, self->current_sourcefile, 
@@ -96,14 +98,22 @@ void recognize_separator(lexer_t *self) {
 void recognize_comment(lexer_t *self) {
     // eat all characters till the newline
     while (self->current_character != '\n') {
+        if (is_eoi(self->current_character)) {
+            break;
+        }
         consume(self);
     }
 }
 
 void recognize_string(lexer_t *self) {
     consume(self); // eat opening quote
-    while (self->current_character != '"') {
+    while (true) {
+        char previous_char = self->current_character;
         consume(self); // eat contents of quote
+        if (self->current_character == '"' && previous_char != '\\') break;
+        if (is_eoi(self->current_character)) {
+            printf("error: yo, unterminated string literal!\n");
+        }
     }
     consume(self); // eat closing quote
 
@@ -117,7 +127,9 @@ void get_next_token(lexer_t *self) {
     switch (self->current_character) {
         case '#': recognize_comment(self); break;
         case '"': recognize_string(self); break;
-        case '\0': { // EOF 
+        case '\0': { // EOF
+            consume(self);
+            push_token(self, TOKEN_EOF);
             self->running = false;
             return;
         }
