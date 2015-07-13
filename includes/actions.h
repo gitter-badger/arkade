@@ -26,8 +26,4 @@ void build_action(vector_t *arguments);
 
 void login_action(vector_t *arguments);
 
-void create_config_file(const char *package_name, const char *package_version, const char *package_author, const char *package_author_email);
-
-void create_gitignore_file(const char *package_name);
-
 #endif // __ACTIONS_H
