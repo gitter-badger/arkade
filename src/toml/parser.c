@@ -96,9 +96,8 @@ vector_t *parse_key_block(parser_t *parser) {
 }
 
 table_t *parse_table(parser_t *parser) {
-    // WTF IS THIS
-    if ((!match_token(parser, "[", TOKEN_SEPARATOR, 0) && !match_token(parser, "", TOKEN_IDENTIFIER, 1))
-        || (match_token(parser, "[", TOKEN_SEPARATOR, 0) && match_token(parser, "[", TOKEN_SEPARATOR, 1))) {
+    if (match_token(parser, "[", TOKEN_SEPARATOR, 1)
+        || !match_token(parser, "", TOKEN_IDENTIFIER, 1)) {
         return false;
     }
 
@@ -144,16 +143,21 @@ array_t *parse_array(parser_t *parser) {
         return false;
     }
 
-    printf("CONSUMING %s\n", peek_ahead(parser, 0)->contents);
     consume(parser);
 
     vector_t *values = create_vector();
     while (true) {
-        expr_t *expr = parse_expr(parser);
-        if (!expr) {
+        if (match_token(parser, "]", TOKEN_SEPARATOR, 0)) {
             break;
         }
-        push_back_item(values, expr);
+
+        expr_t *expr = parse_expr(parser);
+        if (expr) {
+            push_back_item(values, expr);
+            if (match_token(parser, ",", TOKEN_SEPARATOR, 0)) {
+                consume(parser);
+            }
+        }
     }
 
     if (match_token(parser, "]", TOKEN_SEPARATOR, 0)) {
@@ -195,7 +199,6 @@ void start_parsing(parser_t *parser) {
             node_t *node = parse_node(parser);
             if (node) {
                 push_back_item(parser->ast, node);
-                printf("pushed back node!\n");
             }
         }
     }

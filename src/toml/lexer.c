@@ -29,7 +29,6 @@ void start_lexing(lexer_t *self) {
 static void consume(lexer_t *self) {
     if ((self->current_position > self->input_length) 
         || is_eoi(self->current_character)) {
-        printf("EOI `%d`\n", self->current_character);
         return;
     }
 
