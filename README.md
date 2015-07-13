@@ -1,5 +1,6 @@
 ## Arkade
-The package manager for Ark.
+The package manager for Ark. This includes a hand-written TOML parser,
+which will eventually be its own project (and written in Ark).
 
 ## Requirements
 * CMake

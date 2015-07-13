@@ -40,13 +40,11 @@ bare_key_t *parse_key(parser_t *parser) {
         }
         consume(parser);
 
-        literal_t *literal = parse_literal(parser);
-        if (!literal) {
-            printf("error: bare key `%s` expected literal after assignment operator\n", key_name);
+        expr_t *expr = parse_expr(parser);
+        if (!expr) {
+            printf("error: bare key `%s` expected expression after assignment operator\n", key_name);
             return false;
         }
-
-        expr_t *expr = create_expr(LITERAL_EXPR, literal);
         bare_key_t *key = create_key(key_name, expr);
         return key;
     }
@@ -98,10 +96,8 @@ vector_t *parse_key_block(parser_t *parser) {
 }
 
 table_t *parse_table(parser_t *parser) {
-    // first token isn't a [
-    // or the second token is (this means its an array table)
-    if (!match_token(parser, "[", TOKEN_SEPARATOR, 0)
-        || match_token(parser, "[", TOKEN_SEPARATOR, 1)) {
+    if (match_token(parser, "[", TOKEN_SEPARATOR, 1)
+        || !match_token(parser, "", TOKEN_IDENTIFIER, 1)) {
         return false;
     }
 
@@ -117,9 +113,59 @@ table_t *parse_table(parser_t *parser) {
             table_t *table = create_table(table_name, nodes);
             return table;
         }
+        else {
+            printf("error: expected closing square bracket\n");
+            return false;
+        }
+    }
+    printf("error: expected identifier after table opener\n");
+    return false;
+}
+
+expr_t *parse_expr(parser_t *parser) {
+    literal_t *literal = parse_literal(parser);
+    if (literal) {
+        return create_expr(LITERAL_EXPR, literal);
     }
 
-    printf("error: expected closing square bracket\n");
+    array_t *array = parse_array(parser);
+    if (array) {
+        return create_expr(ARRAY_EXPR, array);
+    }
+
+    printf("unknown expression current token is `%s`\n", peek_ahead(parser, 0)->contents);
+    return false;
+}
+
+array_t *parse_array(parser_t *parser) {
+    if (!match_token(parser, "[", TOKEN_SEPARATOR, 0)
+        || match_token(parser, "", TOKEN_IDENTIFIER, 1)) {
+        return false;
+    }
+
+    consume(parser);
+
+    vector_t *values = create_vector();
+    while (true) {
+        if (match_token(parser, "]", TOKEN_SEPARATOR, 0)) {
+            break;
+        }
+
+        expr_t *expr = parse_expr(parser);
+        if (expr) {
+            push_back_item(values, expr);
+            if (match_token(parser, ",", TOKEN_SEPARATOR, 0)) {
+                consume(parser);
+            }
+        }
+    }
+
+    if (match_token(parser, "]", TOKEN_SEPARATOR, 0)) {
+        consume(parser);
+        return create_array(values);
+    }
+
+    printf("error: array expected closing block\n");
     return false;
 }
 
@@ -153,7 +199,6 @@ void start_parsing(parser_t *parser) {
             node_t *node = parse_node(parser);
             if (node) {
                 push_back_item(parser->ast, node);
-                printf("pushed back node!\n");
             }
         }
     }

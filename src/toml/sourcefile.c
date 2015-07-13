@@ -11,6 +11,12 @@ static const char* TOKEN_TYPE[] = {
     "token_eof"
 };
 
+static const char* NODE_TYPE[] = {
+    "table_node",
+    "array_table_node",
+    "key_node"
+};
+
 sourcefile_t *create_sourcefile(char *location) {
     sourcefile_t *self = malloc(sizeof(*self));
     self->location = location;
@@ -69,13 +75,19 @@ char *read_file(sourcefile_t *file) {
 void destroy_sourcefile(sourcefile_t *self) {
     free(self->contents);
 
+    for (int i = 0; i < self->ast->size; i++) {
+        node_t *node = get_vector_item(self->ast, i);
+        printf("%-18s\n", NODE_TYPE[node->kind]);
+        destroy_node(node);
+    }
     destroy_vector(self->ast);
 
     for (int i = 0; i < self->tokens->size; i++) {
         token_t *token = get_vector_item(self->tokens, i);
-        // printf("%-18s %s\n", TOKEN_TYPE[token->type], token->contents);
+        printf("%-18s %s\n", TOKEN_TYPE[token->type], token->contents);
         destroy_token(token);
     }
     destroy_vector(self->tokens);
+    
     free(self);
 }
