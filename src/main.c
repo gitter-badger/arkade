@@ -6,12 +6,12 @@
 #include "load.h"
 
 int main(int argc, char **argv) {
-    parse_arguments(argc, argv);
-    sds hi = sdsnew("");
-    hi = build_root_element("negro");
-    hi = end_root_element(hi);
+    // parse_arguments(argc, argv);
+    sds hi = build_root_element("apple", "mango");
+    sds fin = end_root_element(hi);
 
-    printf("%s\n", hi);
+    printf("%s\n", fin);
     sdsfree(hi);
+    sdsfree(fin);
     return 0;
 }

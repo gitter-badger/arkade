@@ -4,8 +4,10 @@
 #include "sds.h"
 #include "util.h"
 
-sds build_root_element(sds value);
-sds end_root_element(sds final);
-sds build_new_argument(sds name, sds value);
+#define TAB "    "
+
+char* build_root_element(char* name, char* value);
+char* end_root_element(char* final);
+char* build_new_argument(char* name, char* value);
 
 #endif

@@ -1,36 +1,29 @@
 #include "json_builder.h"
 
-sds build_root_element(sds value) {
-	sds final = sdsnew("");
-	sds const_name = "\"name\"";
+char* build_root_element(char* name, char* value) {
+	char* final = sdsempty();
 
-	// series of ugly string concatenations
-	sdscat(final, "{ ");
-	sdscat(final, const_name);
-	sdscat(final, ": \"");
-	sdscat(final, value);
-	sdscat(final, "\"");
-
-	// debugging
-	printf("%s", final);
+	final = sdscat(final, "{\n" TAB "\"");
+	final = sdscat(final, name);
+	final = sdscat(final, "\": \"");
+	final = sdscat(final, value);
+	final = sdscat(final, "\"");
 	return final;
 }
 
-sds end_root_element(sds final) {
-	sds final_result = sdsnew("");
-	final_result = sdscat(final, "\n}");
+char* end_root_element(char* final) {
+	char* final_result = sdsempty();
+	final_result = sdscat(final_result, final);
+	final_result = sdscat(final_result, "\n}");
 	return final_result;
 }
 
-sds build_new_argument(sds name, sds value) {
-	sds final = sdsnew("");
-	sdscat(final, "\"");
-	sdscat(final, name);
-	sdscat(final, "\": \"");
-	sdscat(final, value);
-	sdscat(final, "\",\n");
-
-	// debugging
-	printf("%s", final);
+char* build_new_argument(char* name, char* value) {
+	char* final = sdsempty();
+	final = sdscat(final, "\"");
+	final = sdscat(final, name);
+	final = sdscat(final, "\": \"");
+	final = sdscat(final, value);
+	final = sdscat(final, "\",\n");
 	return final;
 }

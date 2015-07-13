@@ -92,7 +92,9 @@ void publish_action(vector_t *arguments) {
 
     // TODO JSON builder, then we can easily
     // add properties from the TOML file too.
-    sds request = build_root_element(reponame);
+
+    // TODO change name to something else at a later point
+    char* request = build_root_element("name", reponame);
     request = end_root_element(request);
 
     struct curl_slist *headers = NULL;
