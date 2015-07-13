@@ -6,7 +6,7 @@
 #include "load.h"
 
 int main(int argc, char **argv) {
-    // parse_arguments(argc, argv);
+    parse_arguments(argc, argv);
     sds hi = build_root_element("apple", "mango");
     sds fin = end_root_element(hi);
 

@@ -25,12 +25,11 @@ FILE *create_file(const char *name) {
             printf("error: could not create file `%s`\n", name);
             return false;
         }
+        return handle;
     } 
-    else {
-        printf("error: could not create file since it exists `%s`\n", name);
-        return false;
-    }
-    return handle;
+
+    printf("error: could not create file since it exists `%s`\n", name);
+    return false;
 }
 
 char *concat(sds initial, ...) {

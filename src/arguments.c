@@ -50,6 +50,14 @@ void parse_arguments(int argc, char** argv) {
         // eat all the arguments
         // todo, handle flags too
         vector_t *arguments = create_vector();
+        
+        // HACK
+        // push the commands hashmap as an argument for
+        // the help_action!
+        if (!strcmp(command_arg, "help")) {
+            push_back_item(arguments, commands);
+        }
+
         for (size_t i = start; i <= start + cmd->arg_count; i++) {
             push_back_item(arguments, argv[i]);
         }
