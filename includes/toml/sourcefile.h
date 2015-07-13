@@ -6,6 +6,7 @@
 #include <libgen.h>
 
 #include "vector.h"
+#include "ast.h"
 
 typedef struct {
     char *name;
