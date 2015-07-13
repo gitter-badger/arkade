@@ -1,7 +1,7 @@
 #include "sourcefile.h"
 #include "token.h"
 
-static const char* TOKEN_TYPE[] = {
+__attribute__((unused)) static const char* TOKEN_TYPE[] = {
     "token_identifier",
     "token_whole",
     "token_floating",
@@ -11,7 +11,7 @@ static const char* TOKEN_TYPE[] = {
     "token_eof"
 };
 
-static const char* NODE_TYPE[] = {
+__attribute__((unused)) static const char* NODE_TYPE[] = {
     "table_node",
     "array_table_node",
     "key_node"

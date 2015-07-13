@@ -25,8 +25,6 @@ bare_key_t *parse_key(parser_t *parser);
 
 array_table_t *parse_array_table(parser_t *parser);
 
-vector_t *parse_key_block(parser_t *parser);
-
 table_t *parse_table(parser_t *parser);
 
 expr_t *parse_expr(parser_t *parser);
