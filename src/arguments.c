@@ -32,6 +32,7 @@ void parse_arguments(int argc, char** argv) {
     hashmap_put(commands, "new", create_command("new", "Create a new Ark project", &new_action, 1));
     hashmap_put(commands, "publish", create_command("publish", "Publishes the project", &publish_action, 0));
     hashmap_put(commands, "build", create_command("build", "Compiles the current ark project", &build_action, 0));
+    hashmap_put(commands, "login", create_command("login", "Setup your GitHub Auth Token", &login_action, 1));
 
     char *command_arg = argv[1];
     command_t *cmd = NULL;
@@ -42,7 +43,7 @@ void parse_arguments(int argc, char** argv) {
         // note the 1 + is to account
         // for the arkade executable name
         if ((start + cmd->arg_count) > (size_t) argc) {
-            printf("error: too many arguments for subcommand `%s`, \n", cmd->name);
+            printf("error: not enough/too many arguments for subcommand `%s`, \n", cmd->name);
             return;
         }
 

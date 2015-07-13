@@ -38,15 +38,15 @@ features
     ]
 
     [dependencies]
-    // note that I've given it an alias,
-    // this means in ark code it's used as
+    # note that I've given it an alias,
+    # this means in ark code it's used as
 
         dependency mysql;                       
 
-    // and a version is specified
+    # and a version is specified
     mysql = [
         "github.com/mysql/lib-mysql", 
         "5.6.25"
     ]
-    // optional formatting, i like the one below
+    # optional formatting, i like the one below
     mysql = ["github.com/mysql/lib-mysql", "5.6.25"]
