@@ -79,7 +79,7 @@ void publish_action(vector_t *arguments) {
     if (getcwd(cwd, sizeof(cwd))) {
         printf("current directory is %s\n", cwd);
     }
-    
+
     load_t *config_loader = create_loader(create_sourcefile("Ark.toml"));
     table_t *package = get_table(config_loader, "package");
 
