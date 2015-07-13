@@ -12,7 +12,42 @@ static token_t *consume(parser_t *parser) {
     return current;
 }
 
+literal_t *parse_literal(parser_t *parser) {
+    token_t *current = peek_ahead(parser, 0);
+    switch (current->type) {
+        case TOKEN_STRING: 
+            return create_literal(STRING_LITERAL, consume(parser)->contents);
+        case TOKEN_WHOLE: case TOKEN_FLOATING: 
+            return create_literal(NUMBER_LITERAL, consume(parser)->contents);
+        default:
+            if (!strcmp(current->contents, "true")
+                || !strcmp(current->contents, "false")) {
+                return create_literal(BOOLEAN_LITERAL, consume(parser)->contents);
+            }
+            return false;
+    }
+}
+
 bare_key_t *parse_key(parser_t *parser) {
+    if (match_token(parser, "", TOKEN_IDENTIFIER, 0)) {
+        char *key_name = consume(parser)->contents;
+
+        if (!match_token(parser, "=", TOKEN_OPERATOR, 0)) {
+            printf("error: bare key `%s` expected assignment operator\n", key_name);
+            return false;
+        }
+        consume(parser);
+
+        literal_t *literal = parse_literal(parser);
+        if (!literal) {
+            printf("error: bare key `%s` expected literal after assignment operator\n", key_name);
+            return false;
+        }
+
+        expr_t *expr = create_expr(LITERAL_EXPR, literal);
+        bare_key_t *key = create_key(key_name, expr);
+        return key;
+    }
     return false;
 }
 
@@ -28,20 +63,36 @@ array_table_t *parse_array_table(parser_t *parser) {
 
     if (match_token(parser, "", TOKEN_IDENTIFIER, 0)) {
         char *array_table_name = consume(parser)->contents;
+        
+        // throw an error if there is no ]]
         if (!match_token(parser, "]", TOKEN_SEPARATOR, 0) &&
             !match_token(parser, "]", TOKEN_SEPARATOR, 1)) {
             printf("error: expected closing brackets for `%s`\n", array_table_name);
             return false;    
         }
+
+        // we already know what these are
         consume(parser);
         consume(parser);
 
-        vector_t *nodes = create_vector();
+        vector_t *nodes = parse_key_block(parser);
         array_table_t *array_table = create_array_table(array_table_name, nodes);
         return array_table;
     }
 
     return false;
+}
+
+vector_t *parse_key_block(parser_t *parser) {
+    vector_t *block = create_vector();
+    while (true) {
+        bare_key_t *key = parse_key(parser);
+        if (!key) {
+            break;
+        }
+        push_back_item(block, key);
+    }
+    return block;
 }
 
 table_t *parse_table(parser_t *parser) {
@@ -52,6 +103,7 @@ table_t *parse_table(parser_t *parser) {
         return false;
     }
 
+    // we already know what this is
     consume(parser);
 
     if (match_token(parser, "", TOKEN_IDENTIFIER, 0)) {
@@ -59,7 +111,7 @@ table_t *parse_table(parser_t *parser) {
         if (match_token(parser, "]", TOKEN_SEPARATOR, 0)) {
             consume(parser);
 
-            vector_t *nodes = create_vector();
+            vector_t *nodes = parse_key_block(parser);
             table_t *table = create_table(table_name, nodes);
             return table;
         }

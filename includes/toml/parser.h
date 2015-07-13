@@ -19,6 +19,18 @@ typedef struct {
 
 parser_t *create_parser(vector_t *files);
 
+literal_t *parse_literal(parser_t *parser);
+
+bare_key_t *parse_key(parser_t *parser);
+
+array_table_t *parse_array_table(parser_t *parser);
+
+vector_t *parse_key_block(parser_t *parser);
+
+table_t *parse_table(parser_t *parser);
+
+node_t *parse_node(parser_t *parser);
+
 void start_parsing(parser_t *parser);
 
 token_t *peek_ahead(parser_t *parser, int offset);
