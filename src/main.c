@@ -1,25 +1,19 @@
 #include <stdio.h>
 
 #include "arguments.h"
-#include "toml.h"
+#include "load.h"
 
 int main(int argc, char **argv) {
     parse_arguments(argc, argv);
 
-    // make some files to test
-    vector_t *files = create_vector();
-    push_back_item(files, create_sourcefile("toml_test/test.toml"));
+    load_t *loader = create_loader(create_sourcefile("toml_test/test.toml"));
 
-    // parse that shit
-    toml_t* toml = create_toml();
-    start_parsing_toml(toml, files);
-    destroy_toml(toml);
+    table_t *package = get_table(loader, "package");
 
-    // cleanup files
-    for (int i = 0; i < files->size; i++) {
-        destroy_sourcefile(get_vector_item(files, i));
-    }
-    destroy_vector(files);
+    char *name = get_string("name", package);
+    printf("package name %s\n", name);
+
+    destroy_loader(loader);
 
     return 0;
 }

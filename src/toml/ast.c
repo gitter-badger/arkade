@@ -14,12 +14,11 @@ void destroy_literal(literal_t *lit) {
 array_t *create_array(vector_t *values) {
     array_t *array = malloc(sizeof(*array));
     array->values = values;
-    array->value_count = values->size;
     return array;
 }
 
 void destroy_array(array_t *array) {
-    for (int i = 0; i < array->value_count; i++) {
+    for (int i = 0; i < array->values->size; i++) {
         destroy_expr(get_vector_item(array->values, i));
     }
     destroy_vector(array->values);
@@ -41,18 +40,17 @@ void destroy_inline_table(inline_table_t *table) {
     free(table);
 }
 
-expr_t *create_expr(expr_type kind, void *data) {
+expr_t *create_expr(expr_type kind) {
     expr_t *expr = malloc(sizeof(*expr));
     expr->kind = kind;
-    expr->data = data;
     return expr;
 }
 
 void destroy_expr(expr_t *expr) {
     switch (expr->kind) {
-        case LITERAL_EXPR: destroy_literal(expr->data); break;
-        case ARRAY_EXPR: destroy_array(expr->data); break;
-        case TABLE_EXPR: destroy_inline_table(expr->data); break;
+        case LITERAL_EXPR: destroy_literal(expr->literal_expr); break;
+        case ARRAY_EXPR: destroy_array(expr->array_expr); break;
+        case TABLE_EXPR: destroy_inline_table(expr->table_expr); break;
         default: printf("error: attempting to destroy unknown expression\n"); break;
     }
     free(expr);
@@ -70,17 +68,21 @@ void destroy_key(bare_key_t *key) {
     free(key);
 }
 
-table_t *create_table(char *name, vector_t *nodes) {
+table_t *create_table(char *name) {
     table_t *table = malloc(sizeof(*table));
     table->name = name;
-    table->nodes = nodes;
+    table->nodes = hashmap_new();
     return table;
 }
 
+int destroy_table_nodes(any_t data, any_t item) {
+    destroy_node(item);
+    return MAP_OK;
+}
+
 void destroy_table(table_t *table) {
-    for (int i = 0; i < table->nodes->size; i++) {
-        destroy_node(get_vector_item(table->nodes, i));
-    }
+    hashmap_iterate(table->nodes, destroy_table_nodes, NULL);
+    hashmap_free(table->nodes);
     free(table);
 }
 
@@ -98,18 +100,14 @@ void destroy_array_table(array_table_t *array) {
     free(array);
 }
 
-node_t *create_node(node_type kind, void *data) {
-    node_t *node = malloc(sizeof(*node));
-    node->kind = kind;
-    node->data = data;
-    return node;
+node_t *create_node() {
+    return malloc(sizeof(node_t));
 }
 
 void destroy_node(node_t *node) {
     switch (node->kind) {
-        case TABLE_NODE: destroy_table(node->data); break;
-        case ARRAY_TABLE_NODE: destroy_array_table(node->data); break;
-        case KEY_NODE: destroy_key(node->data); break;
+        case TABLE_NODE: destroy_table(node->table); break;
+        case ARRAY_TABLE_NODE: destroy_array_table(node->array_table); break;
     }
     free(node);
 }

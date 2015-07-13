@@ -1,7 +1,7 @@
 #include "sourcefile.h"
 #include "token.h"
 
-static const char* TOKEN_TYPE[] = {
+__attribute__((unused)) static const char* TOKEN_TYPE[] = {
     "token_identifier",
     "token_whole",
     "token_floating",
@@ -11,7 +11,7 @@ static const char* TOKEN_TYPE[] = {
     "token_eof"
 };
 
-static const char* NODE_TYPE[] = {
+__attribute__((unused)) static const char* NODE_TYPE[] = {
     "table_node",
     "array_table_node",
     "key_node"
@@ -22,7 +22,7 @@ sourcefile_t *create_sourcefile(char *location) {
     self->location = location;
     self->name = basename(location);
     self->tokens = create_vector();
-    self->ast = create_vector();
+    self->ast = hashmap_new();
     self->contents = read_file(self);
     if (!self->contents) {
         return false;
@@ -72,22 +72,24 @@ char *read_file(sourcefile_t *file) {
     return contents;
 }
 
+int destroy_nodes(any_t passed_data, any_t item) {
+    destroy_node(item);
+    return MAP_OK;
+}
+
 void destroy_sourcefile(sourcefile_t *self) {
     free(self->contents);
 
-    for (int i = 0; i < self->ast->size; i++) {
-        node_t *node = get_vector_item(self->ast, i);
-        printf("%-18s\n", NODE_TYPE[node->kind]);
-        destroy_node(node);
-    }
-    destroy_vector(self->ast);
-
     for (int i = 0; i < self->tokens->size; i++) {
         token_t *token = get_vector_item(self->tokens, i);
-        printf("%-18s %s\n", TOKEN_TYPE[token->type], token->contents);
         destroy_token(token);
     }
     destroy_vector(self->tokens);
-    
+    printf("freed tokens\n");
+
+    hashmap_iterate(self->ast, destroy_nodes, NULL);
+    hashmap_free(self->ast);
+    printf("freed AST\n");
+
     free(self);
 }

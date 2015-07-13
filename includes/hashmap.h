@@ -15,6 +15,8 @@
 #include <stdio.h>
 #include <stdbool.h>
 
+#include "sds.h"
+
 /*
  * any_t is a pointer.  This allows you to put arbitrary structures in
  * the hashmap.

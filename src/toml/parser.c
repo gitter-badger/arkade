@@ -75,24 +75,13 @@ array_table_t *parse_array_table(parser_t *parser) {
         consume(parser);
         consume(parser);
 
-        vector_t *nodes = parse_key_block(parser);
+        // FIXME
+        vector_t *nodes = create_vector();
         array_table_t *array_table = create_array_table(array_table_name, nodes);
         return array_table;
     }
 
     return false;
-}
-
-vector_t *parse_key_block(parser_t *parser) {
-    vector_t *block = create_vector();
-    while (true) {
-        bare_key_t *key = parse_key(parser);
-        if (!key) {
-            break;
-        }
-        push_back_item(block, key);
-    }
-    return block;
 }
 
 table_t *parse_table(parser_t *parser) {
@@ -106,11 +95,18 @@ table_t *parse_table(parser_t *parser) {
 
     if (match_token(parser, "", TOKEN_IDENTIFIER, 0)) {
         char *table_name = consume(parser)->contents;
+
         if (match_token(parser, "]", TOKEN_SEPARATOR, 0)) {
             consume(parser);
 
-            vector_t *nodes = parse_key_block(parser);
-            table_t *table = create_table(table_name, nodes);
+            table_t *table = create_table(table_name);
+            while (true) {
+                bare_key_t *key = parse_key(parser);
+                if (!key) {
+                    break;
+                }
+                hashmap_put(table->nodes, key->name, key);
+            }
             return table;
         }
         else {
@@ -125,12 +121,16 @@ table_t *parse_table(parser_t *parser) {
 expr_t *parse_expr(parser_t *parser) {
     literal_t *literal = parse_literal(parser);
     if (literal) {
-        return create_expr(LITERAL_EXPR, literal);
+        expr_t *expr = create_expr(LITERAL_EXPR);
+        expr->literal_expr = literal;
+        return expr;
     }
 
     array_t *array = parse_array(parser);
     if (array) {
-        return create_expr(ARRAY_EXPR, array);
+        expr_t * expr = create_expr(ARRAY_EXPR);
+        expr->array_expr = array;
+        return expr;
     }
 
     printf("unknown expression current token is `%s`\n", peek_ahead(parser, 0)->contents);
@@ -160,27 +160,53 @@ array_t *parse_array(parser_t *parser) {
         }
     }
 
-    if (match_token(parser, "]", TOKEN_SEPARATOR, 0)) {
-        consume(parser);
-        return create_array(values);
-    }
-
-    printf("error: array expected closing block\n");
-    return false;
+    consume(parser);
+    return create_array(values);
 }
 
 node_t *parse_node(parser_t *parser) {
     table_t *table = parse_table(parser);
     if (table) {
-        return create_node(TABLE_NODE, table);
+        node_t *node = create_node();
+        node->kind = TABLE_NODE;
+        node->table = table;
+        return node;
     }
 
     array_table_t *array_table = parse_array_table(parser);
     if (array_table) {
-        return create_node(ARRAY_TABLE_NODE, array_table);
+        node_t *node = create_node();
+        node->kind = ARRAY_TABLE_NODE;
+        node->array_table = array_table;
+        return node;
     }
 
+    printf("what node is it?\n");
+
     return false;
+}
+
+void put_node(parser_t *parser, node_t *node) {
+    if (!node) return;
+
+    // can a table exist with the same name
+    // as an array of tables?
+    switch (node->kind) {
+        case TABLE_NODE: {
+            table_t *table = node->table;
+            hashmap_put(parser->ast, table->name, table);
+            break;
+        }
+        case ARRAY_TABLE_NODE: {
+            array_table_t *array_table = node->array_table;
+            hashmap_put(parser->ast, array_table->name, array_table);
+            break;
+        }
+        default: {
+            printf("unrecognized node\n");
+            break;
+        }
+    }
 }
 
 void start_parsing(parser_t *parser) {
@@ -197,9 +223,7 @@ void start_parsing(parser_t *parser) {
         // keep going till we hit EOF token
         while (!match_token(parser, "", TOKEN_EOF, 0) && parser->running) {
             node_t *node = parse_node(parser);
-            if (node) {
-                push_back_item(parser->ast, node);
-            }
+            put_node(parser, node);
         }
     }
 }

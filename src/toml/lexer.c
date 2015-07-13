@@ -51,7 +51,8 @@ void push_token(lexer_t *self, int type) {
         contents = sdsnewlen(&self->input[self->initial_position], length);
     }
     else {
-        contents = sdsnew("lol this is eof");
+        // just so it doesnt moan when we free EOF
+        contents = sdsnew("<EOF>");
     }
 
     token_t *tok = create_token(contents, self->current_sourcefile, 

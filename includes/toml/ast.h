@@ -3,6 +3,7 @@
 
 #include <stdlib.h>
 
+#include "hashmap.h"
 #include "vector.h"
 
 // LITERAL
@@ -24,7 +25,6 @@ typedef struct {
 
 typedef struct {
     vector_t *values;
-    int value_count;
 } array_t;
 
 typedef struct {
@@ -40,7 +40,9 @@ typedef enum {
 
 typedef struct {
     expr_type kind;
-    void *data;
+    literal_t *literal_expr;
+    array_t *array_expr;
+    inline_table_t *table_expr;
 } expr_t;
 
 // TOP LEVEL NODES
@@ -63,7 +65,7 @@ typedef struct {
 */
 typedef struct {
     char *name;
-    vector_t *nodes;
+    map_t *nodes;
 } table_t;
 
 /*
@@ -85,8 +87,7 @@ typedef struct {
 
 typedef enum {
     TABLE_NODE,
-    ARRAY_TABLE_NODE,
-    KEY_NODE
+    ARRAY_TABLE_NODE
 } node_type;
 
 /*
@@ -95,7 +96,8 @@ typedef enum {
 */
 typedef struct {
     node_type kind;
-    void *data;
+    array_table_t *array_table;
+    table_t *table;
 } node_t;
 
 // NODE UTIL
@@ -112,7 +114,7 @@ inline_table_t *create_inline_table(char *name, vector_t *values);
 
 void destroy_inline_table(inline_table_t *table);
 
-expr_t *create_expr(expr_type kind, void *data);
+expr_t *create_expr(expr_type kind);
 
 void destroy_expr(expr_t *expr);
 
@@ -120,7 +122,7 @@ bare_key_t *create_key(char *name, expr_t *value);
 
 void destroy_key(bare_key_t *key);
 
-table_t *create_table(char *name, vector_t *nodes);
+table_t *create_table(char *name);
 
 void destroy_table(table_t *table);
 
@@ -128,7 +130,7 @@ array_table_t *create_array_table(char *name, vector_t *nodes);
 
 void destroy_array_table(array_table_t *array);
 
-node_t *create_node(node_type kind, void *data);
+node_t *create_node();
 
 void destroy_node(node_t *node);
 
