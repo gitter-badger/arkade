@@ -1,6 +1,16 @@
 #include "sourcefile.h"
 #include "token.h"
 
+static const char* TOKEN_TYPE[] = {
+    "token_identifier",
+    "token_whole",
+    "token_floating",
+    "token_operator",
+    "token_separator",
+    "token_string",
+    "token_eof"
+};
+
 sourcefile_t *create_sourcefile(char *location) {
     sourcefile_t *self = malloc(sizeof(*self));
     self->location = location;
@@ -56,10 +66,15 @@ char *read_file(sourcefile_t *file) {
 void destroy_sourcefile(sourcefile_t *self) {
     free(self->contents);
 
+    for (int i = 0; i < self->ast->size; i++) {
+        
+    }
     destroy_vector(self->ast);
 
     for (int i = 0; i < self->tokens->size; i++) {
-        destroy_token(get_vector_item(self->tokens, i));
+        token_t *token = get_vector_item(self->tokens, i);
+        printf("%-18s %s\n", TOKEN_TYPE[token->type], token->contents);
+        destroy_token(token);
     }
     destroy_vector(self->tokens);
     free(self);

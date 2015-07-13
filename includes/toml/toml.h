@@ -3,9 +3,11 @@
 
 #include "lexer.h"
 #include "vector.h"
+#include "parser.h"
 
 typedef struct {
     lexer_t *lex;
+    parser_t *parser;
     vector_t *files;
 } toml_t;
 

@@ -26,8 +26,6 @@ typedef struct {
 
 lexer_t *create_lexer(vector_t *files);
 
-void consume(lexer_t *self);
-
 void start_lexing(lexer_t *self);
 
 void eat_layout(lexer_t *self);

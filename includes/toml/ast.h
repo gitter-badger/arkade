@@ -98,7 +98,7 @@ typedef struct {
     void *data;
 } node_t;
 
-// UTIL
+// NODE UTIL
 
 literal_t *create_literal(literal_type kind, char *value);
 

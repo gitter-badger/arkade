@@ -29,6 +29,8 @@ $ cmake CMakeLists.txt
 $ make
 $ export PATH=$PATH:~/path/to/arkade/bin
 $ arkade new project_name # create a new project
+$ cd project_name
+$ arkade build
 ```
 
 ## License
