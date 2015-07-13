@@ -155,7 +155,6 @@ unsigned long crc32(const unsigned char *s, unsigned int len) {
  * Hashing function for a string
  */
 unsigned int hashmap_hash_int(hashmap_map * m, char* keystring) {
-
     unsigned long key = crc32((unsigned char*) (keystring), strlen(keystring));
 
     /* Robert Jenkins' 32 bit Mix Function */

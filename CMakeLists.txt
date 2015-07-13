@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.0)
 
 project(arkade)
 
-set(CMAKE_C_FLAGS "-Wall -Wextra -Wno-unused-parameter -std=c99")
+set(CMAKE_C_FLAGS "-Wall -Wextra -g -Wno-unused-parameter -std=c99")
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "bin/")
 
 include_directories(includes includes/toml)

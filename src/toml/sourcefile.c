@@ -80,14 +80,16 @@ int destroy_nodes(any_t passed_data, any_t item) {
 void destroy_sourcefile(sourcefile_t *self) {
     free(self->contents);
 
-    hashmap_iterate(self->ast, destroy_nodes, NULL);
-    hashmap_free(self->ast);
-
     for (int i = 0; i < self->tokens->size; i++) {
         token_t *token = get_vector_item(self->tokens, i);
         destroy_token(token);
     }
     destroy_vector(self->tokens);
+    printf("freed tokens\n");
+
+    hashmap_iterate(self->ast, destroy_nodes, NULL);
+    hashmap_free(self->ast);
+    printf("freed AST\n");
 
     free(self);
 }

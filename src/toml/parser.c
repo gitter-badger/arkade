@@ -190,13 +190,18 @@ void put_node(parser_t *parser, node_t *node) {
     switch (node->kind) {
         case TABLE_NODE: {
             table_t *table = (table_t*) node;
-            hashmap_put(parser->ast, table->name, table);
+            printf("%s\n", table->name);
+            // hashmap_put(parser->ast, table->name, table);
             break;
         }
         case ARRAY_TABLE_NODE: {
             // TODO check for duplicates
             array_table_t *array_table = (array_table_t*) node;
-            hashmap_put(parser->ast, array_table->name, array_table);
+            // hashmap_put(parser->ast, array_table->name, array_table);
+            break;
+        }
+        default: {
+            printf("unrecognized node\n");
             break;
         }
     }
