@@ -1,7 +1,0 @@
-[package]
-name = "publish_test"
-version = "0.0.1"
-username = "felixangell"
-authors = [
-	"terry <terry@terry.cat>"
-]
