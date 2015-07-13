@@ -6,6 +6,7 @@
 #include "sourcefile.h"
 #include "vector.h"
 #include "token.h"
+#include "ast.h"
 
 typedef struct {
     vector_t *files;

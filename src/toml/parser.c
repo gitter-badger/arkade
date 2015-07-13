@@ -12,6 +12,48 @@ static token_t *consume(parser_t *parser) {
     return current;
 }
 
+bare_key_t *parse_key(parser_t *parser) {
+    return false;
+}
+
+array_table_t *parse_array_table(parser_t *parser) {
+    return false;
+}
+
+table_t *parse_table(parser_t *parser) {
+    // first token isn't a [
+    // or the second token is (this means its an array table)
+    if (!match_token(parser, "[", TOKEN_SEPARATOR, 0)
+        || match_token(parser, "[", TOKEN_SEPARATOR, 1)) {
+        return false;
+    }
+
+    consume(parser);
+
+    if (match_token(parser, "", TOKEN_IDENTIFIER, 0)) {
+        char *table_name = consume(parser)->contents;
+        if (match_token(parser, "]", TOKEN_SEPARATOR, 0)) {
+            consume(parser);
+
+            vector_t *nodes = create_vector();
+            table_t *table = create_table(table_name, nodes);
+            return table;
+        }
+    }
+
+    printf("error: expected closing square bracket\n");
+    return false;
+}
+
+node_t *parse_node(parser_t *parser) {
+    table_t *table = parse_table(parser);
+    if (table) {
+        return create_node(TABLE_NODE, table);
+    }
+
+    return false;
+}
+
 void start_parsing(parser_t *parser) {
     for (int i = 0; i < parser->files->size; i++) {
         parser->current_sourcefile = get_vector_item(parser->files, i);
@@ -25,7 +67,11 @@ void start_parsing(parser_t *parser) {
         // parse the file tokens to an ast!
         // keep going till we hit EOF token
         while (!match_token(parser, "", TOKEN_EOF, 0) && parser->running) {
-            consume(parser);
+            node_t *node = parse_node(parser);
+            if (node) {
+                push_back_item(parser->ast, node);
+                printf("pushed back node!\n");
+            }
         }
     }
 }

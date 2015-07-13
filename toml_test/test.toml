@@ -3,8 +3,8 @@
 # is for in this case
 
 [package]
-name = "My Big Package ;)"
-version = "0.0.1"
-authors = [
-    "Felix Angell <mail@felixangell.com>"
-]
+# name = "My Big Package ;)"
+# version = "0.0.1"
+# authors = [
+#     "Felix Angell <mail@felixangell.com>"
+# ]

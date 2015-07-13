@@ -52,7 +52,7 @@ typedef struct {
 typedef struct {
     char *name;
     expr_t *value;
-} key_t;
+} bare_key_t;
 
 /*
     This represents a table in TOML, e.g:
@@ -116,9 +116,9 @@ expr_t *create_expr(expr_type kind, void *data);
 
 void destroy_expr(expr_t *expr);
 
-key_t *create_key(char *name, expr_t *value);
+bare_key_t *create_key(char *name, expr_t *value);
 
-void destroy_key(key_t *key);
+void destroy_key(bare_key_t *key);
 
 table_t *create_table(char *name, vector_t *nodes);
 

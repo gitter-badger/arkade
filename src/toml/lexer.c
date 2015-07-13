@@ -58,8 +58,6 @@ void push_token(lexer_t *self, int type) {
     token_t *tok = create_token(contents, self->current_sourcefile, 
         self->initial_position, self->current_position, type);
     push_back_item(self->tokens, tok);
-
-    printf("current: %s\n", contents);
 }
 
 void recognize_identifier(lexer_t *self) {

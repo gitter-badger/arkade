@@ -58,14 +58,14 @@ void destroy_expr(expr_t *expr) {
     free(expr);
 }
 
-key_t *create_key(char *name, expr_t *value) {
-    key_t *key = malloc(sizeof(*key));
+bare_key_t *create_key(char *name, expr_t *value) {
+    bare_key_t *key = malloc(sizeof(*key));
     key->name = name;
     key->value = value;
     return key;
 }
 
-void destroy_key(key_t *key) {
+void destroy_key(bare_key_t *key) {
     destroy_expr(key->value);
     free(key);
 }
