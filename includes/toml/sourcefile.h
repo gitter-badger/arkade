@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <libgen.h>
 
+#include "hashmap.h"
 #include "vector.h"
 #include "ast.h"
 
@@ -13,7 +14,7 @@ typedef struct {
     char *location;
     char *contents;
     vector_t *tokens;
-    vector_t *ast;
+    map_t *ast;
 } sourcefile_t;
 
 sourcefile_t *create_sourcefile(char *location);

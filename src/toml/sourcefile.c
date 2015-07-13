@@ -22,7 +22,7 @@ sourcefile_t *create_sourcefile(char *location) {
     self->location = location;
     self->name = basename(location);
     self->tokens = create_vector();
-    self->ast = create_vector();
+    self->ast = hashmap_new();
     self->contents = read_file(self);
     if (!self->contents) {
         return false;
@@ -72,14 +72,16 @@ char *read_file(sourcefile_t *file) {
     return contents;
 }
 
+int destroy_nodes(any_t passed_data, any_t item) {
+    destroy_node(item);
+    return MAP_OK;
+}
+
 void destroy_sourcefile(sourcefile_t *self) {
     free(self->contents);
 
-    for (int i = 0; i < self->ast->size; i++) {
-        node_t *node = get_vector_item(self->ast, i);
-        destroy_node(node);
-    }
-    destroy_vector(self->ast);
+    hashmap_iterate(self->ast, destroy_nodes, NULL);
+    hashmap_free(self->ast);
 
     for (int i = 0; i < self->tokens->size; i++) {
         token_t *token = get_vector_item(self->tokens, i);

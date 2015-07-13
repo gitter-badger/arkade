@@ -45,13 +45,10 @@ void eat_layout(lexer_t *self) {
 }
 
 void push_token(lexer_t *self, int type) {
-    sds contents = NULL;
+    sds contents = sdsempty();
     if (type != TOKEN_EOF) {
         int length = self->current_position - self->initial_position;
         contents = sdsnewlen(&self->input[self->initial_position], length);
-    }
-    else {
-        contents = sdsnew("lol this is eof");
     }
 
     token_t *tok = create_token(contents, self->current_sourcefile, 

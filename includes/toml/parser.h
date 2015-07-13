@@ -11,7 +11,7 @@
 typedef struct {
     vector_t *files;
     vector_t *tokens;
-    vector_t *ast;
+    map_t *ast;
     bool running;   
     int token_index;
     sourcefile_t *current_sourcefile; 

@@ -109,7 +109,6 @@ void destroy_node(node_t *node) {
     switch (node->kind) {
         case TABLE_NODE: destroy_table(node->data); break;
         case ARRAY_TABLE_NODE: destroy_array_table(node->data); break;
-        case KEY_NODE: destroy_key(node->data); break;
     }
     free(node);
 }

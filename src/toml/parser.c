@@ -106,6 +106,7 @@ table_t *parse_table(parser_t *parser) {
 
     if (match_token(parser, "", TOKEN_IDENTIFIER, 0)) {
         char *table_name = consume(parser)->contents;
+
         if (match_token(parser, "]", TOKEN_SEPARATOR, 0)) {
             consume(parser);
 
@@ -183,6 +184,24 @@ node_t *parse_node(parser_t *parser) {
     return false;
 }
 
+void put_node(parser_t *parser, node_t *node) {
+    // can a table exist with the same name
+    // as an array of tables?
+    switch (node->kind) {
+        case TABLE_NODE: {
+            table_t *table = (table_t*) node;
+            hashmap_put(parser->ast, table->name, table);
+            break;
+        }
+        case ARRAY_TABLE_NODE: {
+            // TODO check for duplicates
+            array_table_t *array_table = (array_table_t*) node;
+            hashmap_put(parser->ast, array_table->name, array_table);
+            break;
+        }
+    }
+}
+
 void start_parsing(parser_t *parser) {
     for (int i = 0; i < parser->files->size; i++) {
         parser->current_sourcefile = get_vector_item(parser->files, i);
@@ -197,9 +216,7 @@ void start_parsing(parser_t *parser) {
         // keep going till we hit EOF token
         while (!match_token(parser, "", TOKEN_EOF, 0) && parser->running) {
             node_t *node = parse_node(parser);
-            if (node) {
-                push_back_item(parser->ast, node);
-            }
+            put_node(parser, node);
         }
     }
 }
