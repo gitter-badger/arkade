@@ -33,8 +33,8 @@ FILE *create_file(const char *name) {
     return handle;
 }
 
-char *concat(char *initial, ...) {
-    char *result = sdsnew(initial);
+char *concat(sds initial, ...) {
+    sds result = sdsnew(initial);
 
     va_list arg;
     va_start(arg, initial);

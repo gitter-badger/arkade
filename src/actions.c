@@ -1,4 +1,5 @@
 #include "actions.h"
+#include "json_builder.h"
 
 static const char *help = {
     "Ark's package manager\n"
@@ -91,9 +92,8 @@ void publish_action(vector_t *arguments) {
 
     // TODO JSON builder, then we can easily
     // add properties from the TOML file too.
-    char *request = sdsnew("{\"name\": \"");
-    request = sdscat(request, reponame);
-    request = sdscat(request, "\"}");
+    sds request = build_root_element(reponame);
+    request = end_root_element(request);
 
     struct curl_slist *headers = NULL;
     headers = curl_slist_append(headers, "Accept: application/json");
