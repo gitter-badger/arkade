@@ -5,6 +5,16 @@ static const char* template_project_config = {
     "[package]"
 };
 
+static const char* template_gitignore = {
+    "_deps/\n"
+    "*.DS_Store\n"
+    "*.bc\n"
+    "*.s\n"
+    "*.ll\n"
+    "*.o\n"
+    "*.toml"
+};
+
 void new_action(vector_t *arguments) {
     char *project_directory = sdsnew(get_vector_item(arguments, 0));
     if (dir_exists(project_directory)) {
@@ -15,6 +25,8 @@ void new_action(vector_t *arguments) {
 
     char *project_config = concat(project_directory, "/arkade.toml", false);
     create_directory(project_directory, 0700);
+
+    char *project_gitignore = concat(project_directory, "/.gitignore", false);
 
     char *deps_path = concat(project_directory, "/_deps/", false);
     create_directory(deps_path, 0700);
@@ -40,8 +52,17 @@ void new_action(vector_t *arguments) {
     char *git_init_cmd = concat("cd ", project_directory, " && git init", false);
     system(git_init_cmd);
 
-    // TODO, gitignore please thx
+    // the magical gitignore
+    FILE *gitignore_file = fopen(project_gitignore, "w");
+    if (gitignore_file) {
+        fprintf(gitignore_file, "%s\n", template_gitignore);
+        fclose(gitignore_file);
+    } else {
+        printf("error: could not write config file `%s`\n", project_gitignore);
+        return;
+    }
 
+    sdsfree(project_gitignore);
     sdsfree(project_config);
     sdsfree(project_directory);
 }

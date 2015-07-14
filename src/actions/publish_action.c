@@ -49,6 +49,7 @@ void publish_action(vector_t *arguments) {
 
         char *remote_cmd = concat("git remote add ark_remote ", repo_url, false);
         system(remote_cmd);
+        
         system("git add --all");
         system("git commit -m 'initial commit'");
         system("git push -u ark_remote master");
