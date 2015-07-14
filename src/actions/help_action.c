@@ -13,11 +13,11 @@ int print_command(any_t data, any_t item) {
 
 // windows is shit and doesn't
 // support magical bolding
-#ifdef _WIN32
+    #ifdef _WIN32
     printf("    %-10s %s\n", command->name, command->desc);
-#else
+    #else
     printf("    \033[1m%-10s\033[0m %s\n", command->name, command->desc);
-#endif
+    #endif
 
     return MAP_OK;
 }
