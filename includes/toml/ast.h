@@ -86,8 +86,8 @@ typedef struct {
 } array_table_t;
 
 typedef enum {
-    TABLE_NODE,
-    ARRAY_TABLE_NODE
+    TABLE_NODE = 0,
+    ARRAY_TABLE_NODE = 1
 } node_type;
 
 /*

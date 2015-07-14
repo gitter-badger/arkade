@@ -4,8 +4,8 @@ load_t *create_loader(sourcefile_t *file) {
     load_t *loader = malloc(sizeof(*loader));
     loader->file = file;
     loader->files = create_vector();
-    loader->toml = create_toml();
 
+    loader->toml = create_toml();
     push_back_item(loader->files, file);
     start_parsing_toml(loader->toml, loader->files);
 
@@ -61,9 +61,24 @@ char *get_string(char *name, table_t *table) {
     return false;
 }
 
+// TODO better name?
+// this differs from get_string as it returns the string
+// without the quotes surrounding it
+// IT MUST BE FREED! this is kind of nasty but it works for now
+char *get_string_contents(char *name, table_t *table) {
+    bare_key_t *bare_key = NULL;
+    if (hashmap_get(table->nodes, name, (void**) &bare_key) == MAP_OK) {
+        char *value = bare_key->value->literal_expr->value;
+        int length = sdslen(value) - 2;
+        char *result = sdsnewlen(&value[1], length);
+        return result;
+    }
+    return false;
+}
+
 void destroy_loader(load_t *loader) {
     destroy_toml(loader->toml);
     destroy_sourcefile(loader->file);
     destroy_vector(loader->files);
-    free(loader);
+    free(loader); // haha get it?
 }
