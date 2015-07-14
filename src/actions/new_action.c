@@ -34,6 +34,14 @@ void new_action(vector_t *arguments) {
         return;
     }
 
+    // initialize git repo
+    // this uses system calls, pls change
+    // to popen or something
+    char *git_init_cmd = concat("cd ", project_directory, " && git init", false);
+    system(git_init_cmd);
+
+    // TODO, gitignore please thx
+
     sdsfree(project_config);
     sdsfree(project_directory);
 }

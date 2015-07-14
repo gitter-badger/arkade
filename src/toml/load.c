@@ -4,8 +4,8 @@ load_t *create_loader(sourcefile_t *file) {
     load_t *loader = malloc(sizeof(*loader));
     loader->file = file;
     loader->files = create_vector();
-    loader->toml = create_toml();
 
+    loader->toml = create_toml();
     push_back_item(loader->files, file);
     start_parsing_toml(loader->toml, loader->files);
 
@@ -80,5 +80,5 @@ void destroy_loader(load_t *loader) {
     destroy_toml(loader->toml);
     destroy_sourcefile(loader->file);
     destroy_vector(loader->files);
-    free(loader);
+    free(loader); // haha get it?
 }

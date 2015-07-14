@@ -7,14 +7,5 @@
 
 int main(int argc, char **argv) {
     parse_arguments(argc, argv);
-
-    sds hi = build_root_element("apple", "mango");
-    sds fruit_array = build_new_array("fruits", "apple", "mango", "plum", false);
-    hi = sdscat(hi, fruit_array);
-    sds fin = end_root_element(hi);
-
-    sdsfree(hi);
-    sdsfree(fin);
-    sdsfree(fruit_array);
     return 0;
 }

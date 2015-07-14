@@ -5,8 +5,8 @@ void login_action(vector_t *arguments) {
     char *config_path = concat(config_dir, "config.toml", false);
     if (dir_exists(config_path)) {
         printf("error: it appears you already have arkade configured.\n"
-            "If you believe this is an error, you can manually edit the configuration"
-            "file located here: `%s`.\n", config_path);
+            "If you believe this is an error, you can manually edit the configuration "
+            "file located here: TODO -f flag`%s`.\n", config_path);
         sdsfree(config_path);
         sdsfree(config_dir);
         return;

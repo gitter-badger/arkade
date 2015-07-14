@@ -46,18 +46,21 @@ char* concat(char *name, ...) {
 
 load_t *load_arkade_config() {
     // does this work on shitdows?
-    char *home_dir = getenv("HOME");
-    char *config_path = concat(home_dir, "/.arkade/config.toml");
+    char *home_dir = concat(getenv("HOME"), "/.arkade/", false);
+    char *config_path = concat(home_dir, "config.toml", false);
     if (!dir_exists(config_path)) {
         printf("error: it appears you haven't setup your GitHub auth key"
             "with Arkade, please generate an auth key and run:\n"
             "    arkade login <key>\n"
             "\n");
+        sdsfree(home_dir);
+        sdsfree(config_path);
         return false;
     }
 
     // TODO verify sourcefile doesnt fuck up
     load_t *loader = create_loader(create_sourcefile(config_path));
+    sdsfree(home_dir);
     sdsfree(config_path);
     return loader;
 }
