@@ -67,8 +67,9 @@ load_t *load_arkade_config() {
 
 load_t *load_project_config() {
     char current_dir[512];
-    if (getcwd(current_dir, sizeof(current_dir))) {
-        printf("%s\n", current_dir);
+    if (!getcwd(current_dir, sizeof(current_dir))) {
+        printf("error: could not load current working directory\n");
+        return false;
     }
 
     // this looks for a configuration file to read
