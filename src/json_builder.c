@@ -45,9 +45,9 @@ void json_array(json_builder_t *builder, char *value, ...) {
 		json_raw(builder, ", ");
 		json_raw(builder, str);
 		count++;
+
 	}
 	va_end(arg);
-
 	json_raw(builder, "]");
 }
 
