@@ -20,6 +20,7 @@ void publish_action(vector_t *arguments) {
     // these exist in the config file
     char *project_name = get_string_contents("name", package);
     char *github_username = get_string_contents("username", package);
+    char *description = get_string_contents("desc", package);
     char *curl_auth = concat(github_username, ":", auth_token, false);
     char *repo_url = concat("http://www.github.com/", github_username, "/", project_name, false);
 
@@ -31,7 +32,16 @@ void publish_action(vector_t *arguments) {
         printf("error: could not do my shit with curl\n");
     }
     else {
-        char *repo_create_request = build_root_element("name", project_name);
+        json_builder_t *json = create_json_builder();
+
+        json_open_object(json);
+        json_pair(json, "name");
+        json_string(json, project_name);
+        json_pair(json, "desc");
+        json_boolean(json, description);
+        json_close_object(json);
+
+        char *repo_create_request = get_json_buffer(json);
 
         struct curl_slist *headers = NULL;
         headers = curl_slist_append(headers, "Accept: application/json");
@@ -39,7 +49,7 @@ void publish_action(vector_t *arguments) {
         curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
 
         curl_easy_setopt(curl, CURLOPT_USERPWD, curl_auth);
-        curl_easy_setopt(curl, CURLOPT_VERBOSE, 1);
+        // curl_easy_setopt(curl, CURLOPT_VERBOSE, 1);
         curl_easy_setopt(curl, CURLOPT_URL, "https://api.github.com/user/repos");
         curl_easy_setopt(curl, CURLOPT_POST, 1);
         curl_easy_setopt(curl, CURLOPT_POSTFIELDS, repo_create_request);
@@ -53,9 +63,9 @@ void publish_action(vector_t *arguments) {
         system("git add --all");
         system("git commit -m 'initial commit'");
         system("git push -u ark_remote master");
-    }
 
-    // if this works im gonna cum
+        destroy_json_builder(json);
+    }
 
     sdsfree(curl_auth);
     sdsfree(repo_url);

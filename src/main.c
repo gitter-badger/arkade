@@ -3,6 +3,7 @@
 #include "util.h"
 #include "json_builder.h"
 #include "arguments.h"
+#include "json_builder.h"
 #include "load.h"
 
 int main(int argc, char **argv) {

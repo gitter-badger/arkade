@@ -85,11 +85,9 @@ void destroy_sourcefile(sourcefile_t *self) {
         destroy_token(token);
     }
     destroy_vector(self->tokens);
-    printf("freed tokens\n");
 
     hashmap_iterate(self->ast, destroy_nodes, NULL);
     hashmap_free(self->ast);
-    printf("freed AST\n");
 
     free(self);
 }

@@ -21,11 +21,6 @@ int destroy_commands(any_t __attribute__((unused)) passed_data, any_t item) {
 }
 
 void parse_arguments(int argc, char** argv) {
-    if (argc <= 1) {
-        help_action(NULL);
-        return;
-    }
-
     // populate hashmap
     commands = hashmap_new();
     hashmap_put(commands, "help", create_command("help", "shows this help menu", &help_action, 0));
@@ -33,6 +28,14 @@ void parse_arguments(int argc, char** argv) {
     hashmap_put(commands, "publish", create_command("publish", "Publishes the project", &publish_action, 0));
     hashmap_put(commands, "build", create_command("build", "Compiles the current ark project", &build_action, 0));
     hashmap_put(commands, "login", create_command("login", "Setup your GitHub Auth Token", &login_action, 1));
+
+    if (argc <= 1) {
+        vector_t *args = create_vector();
+        push_back_item(args, commands);
+        help_action(args);
+        destroy_vector(args);
+        return;
+    }
 
     char *command_arg = argv[1];
     command_t *cmd = NULL;
