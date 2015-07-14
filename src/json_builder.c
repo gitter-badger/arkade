@@ -29,6 +29,10 @@ void json_number(json_builder_t *builder, char *value) {
 	json_raw(builder, value);
 }
 
+char *get_json_buffer(json_builder_t *builder) {
+	return builder->result;
+}
+
 void json_array(json_builder_t *builder, char *value, ...) {
 	json_raw(builder, "[");
 	json_raw(builder, value);

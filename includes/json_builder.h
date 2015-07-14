@@ -23,6 +23,8 @@ void json_string(json_builder_t *builder, char *value);
 
 void json_number(json_builder_t *builder, char *value);
 
+char *get_json_buffer(json_builder_t *builder);
+
 void json_array(json_builder_t *builder, char *value, ...);
 
 void json_boolean(json_builder_t *builder, bool value);
