@@ -44,7 +44,7 @@ char* build_new_array(char *name, ...) {
 		}
 		final = sdscat(final, "\"");
 		final = sdscat(final, str);
-		final = sdscat(final, "\" ");
+		final = sdscat(final, "\"");
 		i++;
 	}
 	va_end(arg);
