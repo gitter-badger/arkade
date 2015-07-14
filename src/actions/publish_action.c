@@ -31,7 +31,19 @@ void publish_action(vector_t *arguments) {
         printf("error: could not do my shit with curl\n");
     }
     else {
-        char *repo_create_request = build_root_element("name", project_name);
+        // the builder should really allow you to join elements normally?
+        // e.g.
+        // json_builder *builder = create_builder();
+        // build_root(builder);
+        // append_element(builder, "name", json_str("value"));
+        // append_element(builder, "yeah", json_array("a", "b"))
+        // end_root(builder)
+        // would give us:
+        //
+        //  { name: "value", "yeah": ["a", "b"] }
+        //
+        // ??
+        char *repo_create_request = "todo";
 
         struct curl_slist *headers = NULL;
         headers = curl_slist_append(headers, "Accept: application/json");
@@ -49,7 +61,7 @@ void publish_action(vector_t *arguments) {
 
         char *remote_cmd = concat("git remote add ark_remote ", repo_url, false);
         system(remote_cmd);
-        
+
         system("git add --all");
         system("git commit -m 'initial commit'");
         system("git push -u ark_remote master");
