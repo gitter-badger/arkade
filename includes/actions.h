@@ -21,6 +21,8 @@ void help_action(vector_t *arguments);
 
 void new_action(vector_t *arguments);
 
+void update_action(vector_t *arguments);
+
 void publish_action(vector_t *arguments);
 
 void build_action(vector_t *arguments);

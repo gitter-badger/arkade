@@ -23,13 +23,19 @@ int destroy_commands(any_t __attribute__((unused)) passed_data, any_t item) {
 void parse_arguments(int argc, char** argv) {
     // populate hashmap
     commands = hashmap_new();
-    hashmap_put(commands, "help", create_command("help", "shows this help menu", &help_action, 0));
+    hashmap_put(commands, "help", create_command("help", "Shows this help menu", &help_action, 0));
     hashmap_put(commands, "new", create_command("new", "Create a new Ark project", &new_action, 1));
     hashmap_put(commands, "publish", create_command("publish", "Publishes the project", &publish_action, 0));
     hashmap_put(commands, "build", create_command("build", "Compiles the current ark project", &build_action, 0));
     hashmap_put(commands, "login", create_command("login", "Setup your GitHub Auth Token", &login_action, 1));
+    hashmap_put(commands, "update", create_command("update", "Rebuilds all dependencies", &update_action, 0));
 
+    // not enough arguments given, just show the help
+    // menu
     if (argc <= 1) {
+        // again we have to do the weird hack
+        // where the hashmap of commands is passed
+        // as an argument
         vector_t *args = create_vector();
         push_back_item(args, commands);
         help_action(args);
