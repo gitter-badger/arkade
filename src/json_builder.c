@@ -38,18 +38,6 @@ void json_array(json_builder_t *builder, char *value, ...) {
 	json_raw(builder, value);
 
 	va_list arg;
-<<<<<<< HEAD
-	va_start(arg, name);
-	int i = 0;
-	while((str = va_arg(arg, char*)) != NULL) {
-		if (i != 0) {
-			final = sdscat(final, ", ");
-		}
-		final = sdscat(final, "\"");
-		final = sdscat(final, str);
-		final = sdscat(final, "\"");
-		i++;
-=======
 	va_start(arg, value);
 	int count = 0;
 	char *str;
@@ -57,10 +45,9 @@ void json_array(json_builder_t *builder, char *value, ...) {
 		json_raw(builder, ", ");
 		json_raw(builder, str);
 		count++;
->>>>>>> upstream/master
+
 	}
 	va_end(arg);
-
 	json_raw(builder, "]");
 }
 
