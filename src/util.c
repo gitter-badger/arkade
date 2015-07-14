@@ -44,7 +44,25 @@ char* concat(char *name, ...) {
     return final;
 }
 
-load_t *load_ark_config() {
+load_t *load_arkade_config() {
+    // does this work on shitdows?
+    char *home_dir = getenv("HOME");
+    char *config_path = concat(home_dir, "/.arkade/config.toml");
+    if (!dir_exists(config_path)) {
+        printf("error: it appears you haven't setup your GitHub auth key"
+            "with Arkade, please generate an auth key and run:\n"
+            "    arkade login <key>\n"
+            "\n");
+        return false;
+    }
+
+    // TODO verify sourcefile doesnt fuck up
+    load_t *loader = create_loader(create_sourcefile(config_path));
+    sdsfree(config_path);
+    return loader;
+}
+
+load_t *load_project_config() {
     char current_dir[512];
     if (getcwd(current_dir, sizeof(current_dir))) {
         printf("%s\n", current_dir);
@@ -53,16 +71,18 @@ load_t *load_ark_config() {
     // this looks for a configuration file to read
     // in the current directory, it will throw an error
     // if it can't find one.
-    char *ark_config_path = concat(current_dir, "/Arkade.toml", false);
+    char *ark_config_path = concat(current_dir, "/arkade.toml", false);
     if (!dir_exists(ark_config_path)) {
         printf("error: no configuration file exists in the current directory.\n"
             "Arkade is looking for the following configuration file:\n"
             "\n"
             "    `%s`\n"
             "\n", ark_config_path);
+        sdsfree(ark_config_path);
         return false;
     }
 
+    // TODO verify sourcefile doesnt fuck up
     load_t *loader = create_loader(create_sourcefile(ark_config_path));
     sdsfree(ark_config_path);
     return loader;

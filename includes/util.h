@@ -19,6 +19,8 @@ FILE *create_file(const char *name);
 
 char *concat(char *initial, ...);
 
-load_t *load_ark_config();
+load_t *load_arkade_config();
+
+load_t *load_project_config();
 
 #endif // __UTIL_H

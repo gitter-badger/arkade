@@ -1,7 +1,12 @@
 #include "actions.h"
 
 void build_action(vector_t *arguments) {
-    load_t *loader = load_ark_config();
+    load_t *loader = load_project_config();
+    if (!loader) {
+        printf("error: are you sure the current directory contains an Ark project?\n");
+        return;
+    }
+
     table_t *package = get_table(loader, "package");
 
     // check for a custom build method and use it if it
