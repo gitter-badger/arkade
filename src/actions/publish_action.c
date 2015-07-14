@@ -30,6 +30,13 @@ void publish_action(vector_t *arguments) {
         goto cleanup;
     }
 
+    // check the config file to see if the specified
+    // repository is private
+    bool private = true;
+    if (!get_string_contents("private", package)) {
+        private = false;
+    }
+
     char *curl_auth = concat(github_username, ":", auth_token, false);
     char *repo_url = concat("http://www.github.com/", github_username, "/", project_name, false);
 
@@ -46,7 +53,10 @@ void publish_action(vector_t *arguments) {
         json_open_object(json);
         json_pair(json, "name");
         json_string(json, project_name);
-
+        if (private) {
+            json_pair(json, "private");
+            json_boolean(json, true);
+        }
         // description for that shit
         char *description = get_string_contents("desc", package);
         if (description) {
