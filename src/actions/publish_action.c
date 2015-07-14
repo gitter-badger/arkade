@@ -39,7 +39,7 @@ void publish_action(vector_t *arguments) {
         curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
 
         curl_easy_setopt(curl, CURLOPT_USERPWD, curl_auth);
-        curl_easy_setopt(curl, CURLOPT_VERBOSE, 1);
+        // curl_easy_setopt(curl, CURLOPT_VERBOSE, 1);
         curl_easy_setopt(curl, CURLOPT_URL, "https://api.github.com/user/repos");
         curl_easy_setopt(curl, CURLOPT_POST, 1);
         curl_easy_setopt(curl, CURLOPT_POSTFIELDS, repo_create_request);
@@ -49,13 +49,10 @@ void publish_action(vector_t *arguments) {
 
         char *remote_cmd = concat("git remote add ark_remote ", repo_url, false);
         system(remote_cmd);
-
         system("git add --all");
         system("git commit -m 'initial commit'");
         system("git push -u ark_remote master");
     }
-
-    // if this works im gonna cum
 
     sdsfree(curl_auth);
     sdsfree(repo_url);
