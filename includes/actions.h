@@ -10,6 +10,7 @@
 #include "util.h"
 #include "vector.h"
 #include "sds.h"
+#include "arguments.h"
 
 #define CONFIG_NAME "Ark.toml"
 #define DEPENDENCY_FOLDER_NAME "_deps"

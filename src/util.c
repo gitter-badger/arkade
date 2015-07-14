@@ -25,21 +25,68 @@ FILE *create_file(const char *name) {
             printf("error: could not create file `%s`\n", name);
             return false;
         }
+        return handle;
     } 
-    else {
-        printf("error: could not create file since it exists `%s`\n", name);
-        return false;
-    }
-    return handle;
+
+    printf("error: could not create file since it exists `%s`\n", name);
+    return false;
 }
 
-char *concat(sds initial, ...) {
-    sds result = sdsnew(initial);
-
+char* concat(char *name, ...) {
+    char *final = sdsnew(name);
+    char* str;
     va_list arg;
-    va_start(arg, initial);
-    result = sdscat(result, arg);
+    va_start(arg, name);
+    while((str = va_arg(arg, char*)) != NULL) {
+        final = sdscat(final, str);
+    }
     va_end(arg);
+    return final;
+}
 
-    return result;
+load_t *load_arkade_config() {
+    // does this work on shitdows?
+    char *home_dir = concat(getenv("HOME"), "/.arkade/", false);
+    char *config_path = concat(home_dir, "config.toml", false);
+    if (!dir_exists(config_path)) {
+        printf("error: it appears you haven't setup your GitHub auth key"
+            "with Arkade, please generate an auth key and run:\n"
+            "    arkade login <key>\n"
+            "\n");
+        sdsfree(home_dir);
+        sdsfree(config_path);
+        return false;
+    }
+
+    // TODO verify sourcefile doesnt fuck up
+    load_t *loader = create_loader(create_sourcefile(config_path));
+    sdsfree(home_dir);
+    sdsfree(config_path);
+    return loader;
+}
+
+load_t *load_project_config() {
+    char current_dir[512];
+    if (getcwd(current_dir, sizeof(current_dir))) {
+        printf("%s\n", current_dir);
+    }
+
+    // this looks for a configuration file to read
+    // in the current directory, it will throw an error
+    // if it can't find one.
+    char *ark_config_path = concat(current_dir, "/arkade.toml", false);
+    if (!dir_exists(ark_config_path)) {
+        printf("error: no configuration file exists in the current directory.\n"
+            "Arkade is looking for the following configuration file:\n"
+            "\n"
+            "    `%s`\n"
+            "\n", ark_config_path);
+        sdsfree(ark_config_path);
+        return false;
+    }
+
+    // TODO verify sourcefile doesnt fuck up
+    load_t *loader = create_loader(create_sourcefile(ark_config_path));
+    sdsfree(ark_config_path);
+    return loader;
 }

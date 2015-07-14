@@ -27,6 +27,8 @@ char *get_array_value(int index, array_t *array);
 
 char *get_string(char *name, table_t *table);
 
+char *get_string_contents(char *name, table_t *table);
+
 void destroy_loader(load_t *loader);
 
 #endif // __LOAD_H
