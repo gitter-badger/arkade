@@ -1,7 +1,7 @@
 #include "actions.h"
 
 static const char* help_template = {
-    "usage: ark <command> [<args> ...]"
+    "usage: arkade <command> [<args> ...]"
     "\n"
     "\n"
     "commands:"
@@ -23,8 +23,11 @@ int print_command(any_t data, any_t item) {
 }
 
 void help_action(vector_t *arguments) {
-    printf("%s\n", help_template);
+    // basically I did a little hack where the hashmap
+    // is the first argument on here
     map_t *commands = get_vector_item(arguments, 0);
+
+    printf("%s\n", help_template);
     hashmap_iterate(commands, print_command, NULL);
     printf("\n");
 }
