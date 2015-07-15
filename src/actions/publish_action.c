@@ -39,17 +39,27 @@ void publish_action(vector_t *arguments) {
 
     char *license_option = get_string_contents("license", package);
     int license = -1;
-    if (!strcmp(license_option, "agpl-3.0")        || !strcmp(license_option, "apache-2.0")
-        || !strcmp(license_option, "artistic-2.0") || !strcmp(license_option, "bsd-2-clause")
-        || !strcmp(license_option, "bsd-3-clause") || !strcmp(license_option, "cc0-1.0")  
-        || !strcmp(license_option, "epl-1.0")      || !strcmp(license_option, "gpl-2.0")  
-        || !strcmp(license_option, "gpl-3.0")      || !strcmp(license_option, "isc")      
-        || !strcmp(license_option, "lgpl-2.1")     || !strcmp(license_option, "lgpl-3.0") 
-        || !strcmp(license_option, "mit")          || !strcmp(license_option, "mpl-2.0")  
-        || !strcmp(license_option, "no-license")   || !strcmp(license_option, "unlicense")) {
-            license = 0;
+    map_t *license_map = hashmap_new();
+    hashmap_put(license_map, "mit", "mit");
+    hashmap_put(license_map, "agpl-3.0", "agpl-3.0");
+    hashmap_put(license_map, "apache-2.0", "apache-2.0");
+    hashmap_put(license_map, "artistic-2.0", "artistic-2.0");
+    hashmap_put(license_map, "bsd-2-clause", "bsd-2-clause");
+    hashmap_put(license_map, "bsd-3-clause", "bsd-3-clause");
+    hashmap_put(license_map, "cc0-1.0", "cc0-1.0");
+    hashmap_put(license_map, "epl-1.0", "epl-1.0");
+    hashmap_put(license_map, "gpl-2.0", "gpl-2.0");
+    hashmap_put(license_map, "gpl-3.0", "gpl-3.0");
+    hashmap_put(license_map, "isc", "isc");
+    hashmap_put(license_map, "lgpl-2.1", "lgpl-2.1");
+    hashmap_put(license_map, "lgpl-3.0", "lgpl-3.0");
+    hashmap_put(license_map, "mpl-2.0", "mpl-2.0");
+    hashmap_put(license_map, "no-license", "no-license");
+    hashmap_put(license_map, "unlicense", "unlicense");
+
+    if (hashmap_get(license_map, license_option, (void **) &license_option) == MAP_OK) {
+        license = 0;
     }
-    
     char *curl_auth = concat(github_username, ":", auth_token, false);
     char *repo_url = concat("http://www.github.com/", github_username, "/", project_name, false);
 
@@ -104,6 +114,9 @@ void publish_action(vector_t *arguments) {
         system(remote_cmd);
         sdsfree(remote_cmd);
 
+        if (license == 0) {
+            system("git pull ark_remote master --force");
+        }
         system("git add --all");
         system("git commit -m 'initial commit'");
         system("git push -u ark_remote master");
@@ -115,8 +128,9 @@ void publish_action(vector_t *arguments) {
 
     sdsfree(curl_auth);
     sdsfree(repo_url);
+    hashmap_free(license_map);
 
     cleanup:
-    destroy_loader(token_loader);
-    destroy_loader(loader);
+        destroy_loader(token_loader);
+        destroy_loader(loader);
 }
