@@ -15,13 +15,15 @@ void login_action(vector_t *arguments) {
     create_directory(config_dir, 0700);
 
     char *auth_token = sdsnew(get_vector_item(arguments, 0));
+    
     FILE *config_file = fopen(config_path, "w");
     if (config_file) {
         fprintf(config_file, "[config]\ntoken = \"%s\"\n", auth_token);
-        fclose(config_file);
     } else {
         printf("error: could not write arkade config file at `%s`\n", config_path);
     }
+    fclose(config_file);
+
     sdsfree(auth_token);
     sdsfree(config_path);
     sdsfree(config_dir);

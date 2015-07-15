@@ -11,8 +11,8 @@ static const char* help_template = {
 int print_command(any_t data, any_t item) {
     command_t *command = item;
 
-// windows is shit and doesn't
-// support magical bolding
+    // windows is shit and doesn't
+    // support magical bolding
     #ifdef _WIN32
     printf("    %-10s %s\n", command->name, command->desc);
     #else
