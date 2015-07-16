@@ -63,8 +63,8 @@ void publish_action(vector_t *arguments) {
     }
 
     char *license_option = get_string_contents("license", package);
-    char *curl_auth = concat(github_username, ":", auth_token, false);
-    char *repo_url = concat("http://www.github.com/", github_username, "/", project_name, false);
+    char *curl_auth = concat(github_username, ":", auth_token);
+    char *repo_url = concat("http://www.github.com/", github_username, "/", project_name);
 
     // create repo with curl!
     // this is where it gets messy
@@ -121,7 +121,7 @@ void publish_action(vector_t *arguments) {
         curl_easy_perform(curl);
         curl_easy_cleanup(curl);
 
-        char *remote_cmd = concat("git remote add ark_remote ", repo_url, false);
+        char *remote_cmd = concat("git remote add ark_remote ", repo_url);
         system(remote_cmd);
         sdsfree(remote_cmd);
 

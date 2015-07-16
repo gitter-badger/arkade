@@ -1,8 +1,8 @@
 #include "actions.h"
 
 void login_action(vector_t *arguments) {
-    char *config_dir = concat(getenv("HOME"), "/.arkade/", false);
-    char *config_path = concat(config_dir, "config.toml", false);
+    char *config_dir = concat(getenv("HOME"), "/.arkade/");
+    char *config_path = concat(config_dir, "config.toml");
     if (dir_exists(config_path)) {
         printf("error: it appears you already have arkade configured.\n"
             "If you believe this is an error, you can manually edit the configuration "

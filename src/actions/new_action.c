@@ -35,18 +35,18 @@ void new_action(vector_t *arguments) {
         return;
     }
 
-    char *project_config = concat(project_directory, "/arkade.toml", false);
+    char *project_config = concat(project_directory, "/arkade.toml");
     create_directory(project_directory, 0700);
 
-    char *project_gitignore = concat(project_directory, "/.gitignore", false);
+    char *project_gitignore = concat(project_directory, "/.gitignore");
 
-    char *project_helloworld = concat(project_directory, "/src/main.ark", false);
+    char *project_helloworld = concat(project_directory, "/src/main.ark");
 
-    char *deps_path = concat(project_directory, "/_deps/", false);
+    char *deps_path = concat(project_directory, "/_deps/");
     create_directory(deps_path, 0700);
     sdsfree(deps_path);
 
-    char *src_path = concat(project_directory, "/src/", false);
+    char *src_path = concat(project_directory, "/src/");
     create_directory(src_path, 0700);
     sdsfree(src_path);
 
@@ -63,7 +63,7 @@ void new_action(vector_t *arguments) {
     // initialize git repo
     // this uses system calls, pls change
     // to popen or something
-    char *git_init_cmd = concat("cd ", project_directory, " && git init", false);
+    char *git_init_cmd = concat("cd ", project_directory, " && git init");
     system(git_init_cmd);
 
     // the magical gitignore
