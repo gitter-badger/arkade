@@ -32,7 +32,7 @@ FILE *create_file(const char *name) {
     return false;
 }
 
-char* concat(char *name, ...) {
+char *__concat(char *name, ...) {
     char *final = sdsnew(name);
     char* str;
     va_list arg;
@@ -46,8 +46,8 @@ char* concat(char *name, ...) {
 
 load_t *load_arkade_config() {
     // does this work on shitdows?
-    char *home_dir = concat(getenv("HOME"), "/.arkade/", false);
-    char *config_path = concat(home_dir, "config.toml", false);
+    char *home_dir = concat(getenv("HOME"), "/.arkade/");
+    char *config_path = concat(home_dir, "config.toml");
     if (!dir_exists(config_path)) {
         printf("error: it appears you haven't setup your GitHub auth key"
             "with Arkade, please generate an auth key and run:\n"
@@ -75,7 +75,7 @@ load_t *load_project_config() {
     // this looks for a configuration file to read
     // in the current directory, it will throw an error
     // if it can't find one.
-    char *ark_config_path = concat(current_dir, "/arkade.toml", false);
+    char *ark_config_path = concat(current_dir, "/arkade.toml");
     if (!dir_exists(ark_config_path)) {
         printf("error: no configuration file exists in the current directory.\n"
             "Arkade is looking for the following configuration file:\n"

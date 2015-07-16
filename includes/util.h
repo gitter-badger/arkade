@@ -11,13 +11,15 @@
 #include "load.h"
 #include "sds.h"
 
+#define concat(...) __concat(__VA_ARGS__, false)
+
 bool dir_exists(const char *path);
 
 void create_directory(const char *path, int mode);
 
 FILE *create_file(const char *name);
 
-char *concat(char *initial, ...);
+char *__concat(char *initial, ...);
 
 load_t *load_arkade_config();
 
