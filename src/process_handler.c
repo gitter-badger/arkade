@@ -17,14 +17,16 @@ bool __create_process(char *command, char *input, ...) {
         printf("could not run proccess `%s`\n", command);
         return proc.failed = true;
     }
-
     
-    va_list arg;
-    va_start(arg, input);
-    for (char *str = va_arg(arg, char*); str != NULL;) {
-        printf("inputs %s\n", str);
+    if (input) {
+        va_list arg;
+        va_start(arg, input);
+        fputs(input, process);
+        for (char *str = va_arg(arg, char*); str != NULL;) {
+            fputs(str, process);
+        }
+        va_end(arg);
     }
-    va_end(arg);
 
     return proc.failed;
 }
