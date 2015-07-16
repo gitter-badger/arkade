@@ -19,10 +19,14 @@ bool __create_process(char *command, char *input, ...) {
     }
     
     if (input) {
+        printf("running this shit nigga\n");
+
         va_list arg;
         va_start(arg, input);
+        char *str = NULL;
+
         fputs(input, process);
-        for (char *str = va_arg(arg, char*); str != NULL;) {
+        while ((str = va_arg(arg, char*)) != NULL) {
             fputs(str, process);
         }
         va_end(arg);

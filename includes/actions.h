@@ -10,6 +10,7 @@
 #include "util.h"
 #include "vector.h"
 #include "sds.h"
+#include "process_handler.h"
 #include "arguments.h"
 
 #define CONFIG_NAME "Ark.toml"

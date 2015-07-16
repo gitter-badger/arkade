@@ -10,7 +10,5 @@
 int main(int argc, char **argv) {
     parse_arguments(argc, argv);
 
-    create_process("ls");
-
     return 0;
 }

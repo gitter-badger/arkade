@@ -64,7 +64,7 @@ void new_action(vector_t *arguments) {
     // this uses system calls, pls change
     // to popen or something
     char *git_init_cmd = concat("cd ", project_directory, " && git init");
-    system(git_init_cmd);
+    create_process(git_init_cmd);
 
     // the magical gitignore
     FILE *gitignore_file = fopen(project_gitignore, "w");

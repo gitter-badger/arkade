@@ -122,15 +122,26 @@ void publish_action(vector_t *arguments) {
         curl_easy_cleanup(curl);
 
         char *remote_cmd = concat("git remote add ark_remote ", repo_url);
-        system(remote_cmd);
+        create_process(remote_cmd);
         sdsfree(remote_cmd);
 
         if (has_license) {
-            system("git pull ark_remote master --force");
+            create_process("git pull ark_remote master --force");
         }
-        system("git add --all");
-        system("git commit -m 'initial commit'");
-        system("git push -u ark_remote master");
+        create_process("git add --all");
+        create_process("git commit -m 'initial commit'");
+
+        char *push_command = concat(
+            "git push https://",
+            curl_auth,
+            "@github.com/",
+            github_username, 
+            "/", 
+            project_name,
+            ".git --all"
+        );
+        create_process(push_command);
+        sdsfree(push_command);
 
         destroy_json_builder(json);
     }
