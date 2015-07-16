@@ -24,34 +24,43 @@ bool license_exists(const char *license) {
 
 void publish_action(vector_t *arguments) {
     // load the auth token from configuration
-    load_t *token_loader = load_arkade_config();
-    table_t *config = get_table(token_loader, "config");
+    load_t *arkade_config_loader = load_arkade_config();
+    table_t *config = get_table(arkade_config_loader, "config");
+    
     char *auth_token = get_string_contents("token", config);
+    if (!auth_token) {
+        printf("error: it appears you haven't setup your GitHub auth key"
+            "with Arkade, please generate an auth key and run:\n"
+            "    arkade login <key>\n"
+            "\n");
+        destroy_loader(arkade_config_loader);
+        return;
+    }
+
+    char *github_username = get_string_contents("github_username", config);
+    if (!github_username) {
+        printf("error: project requires a github username in the arkade configuration file\n"
+            "    Please add your `github_username` to %s\n", arkade_config_loader->file->location);
+        destroy_loader(arkade_config_loader);
+        return;
+    }
 
     // load the project configuration file
-    load_t *loader = load_project_config();
-    if (!loader) {
+    load_t *project_config_loader = load_project_config();
+    if (!project_config_loader) {
         printf("error: are you sure the current directory contains an Ark project?\n");
         return;
     }
 
-    table_t *package = get_table(loader, "package");
+    table_t *package = get_table(project_config_loader, "package");
 
     // todo, we should really check 
     // these exist in the config file
     char *project_name = get_string_contents("name", package);
     if (!project_name) {
         printf("error: project name undefined in configuration file\n");
-        destroy_loader(token_loader);
-        destroy_loader(loader);
-        return;
-    }
-
-    char *github_username = get_string_contents("username", package);
-    if (!github_username) {
-        printf("error: project requires a github username in the configuration file\n");
-        destroy_loader(token_loader);
-        destroy_loader(loader);
+        destroy_loader(arkade_config_loader);
+        destroy_loader(project_config_loader);
         return;
     }
 
@@ -149,6 +158,6 @@ void publish_action(vector_t *arguments) {
     sdsfree(curl_auth);
     sdsfree(repo_url);
 
-    destroy_loader(token_loader);
-    destroy_loader(loader);
+    destroy_loader(arkade_config_loader);
+    destroy_loader(project_config_loader);
 }

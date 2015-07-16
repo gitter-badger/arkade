@@ -13,12 +13,15 @@ void start_lexing(lexer_t *self) {
         // a lot of shit needs to be reset...
         self->tokens = file->tokens;
         self->input = file->contents;
+        if (!self->input) {
+            printf("error: couldn't load contents from file %s\n", file->name);
+        }
         self->input_length = (int) strlen(self->input);
+        self->initial_position = 0;
+        self->current_position = 0;
         self->current_character = self->input[self->current_position];
         self->current_sourcefile = file;
         self->running = true;
-        self->initial_position = 0;
-        self->current_position = 0;
 
         while (self->running) {
             get_next_token(self);
