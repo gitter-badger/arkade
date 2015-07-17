@@ -40,7 +40,7 @@ void parse_arguments(int argc, char** argv) {
         push_back_item(args, commands);
         help_action(args);
         destroy_vector(args);
-        return;
+        goto cleanup;
     }
 
     char *command_arg = argv[1];
@@ -53,7 +53,7 @@ void parse_arguments(int argc, char** argv) {
         // for the arkade executable name
         if ((start + cmd->arg_count) > (size_t) argc) {
             printf("error: not enough/too many arguments for subcommand `%s`, \n", cmd->name);
-            return;
+            goto cleanup;
         }
 
         // eat all the arguments
@@ -77,6 +77,7 @@ void parse_arguments(int argc, char** argv) {
         printf("error: no such subcommand `%s`\n", command_arg);
     }
 
+    cleanup:
     // cleanup our hashmap and its contents
     hashmap_iterate(commands, destroy_commands, NULL);
     hashmap_free(commands);
