@@ -1,4 +1,4 @@
-## Arkade
+## Arkade  ![Travis status](https://travis-ci.org/vnev/arkade.svg?branch=master)
 A package manager for Ark. It includes a hand-written TOML parser,
 which will eventually be its own project (and written in Ark).
 
