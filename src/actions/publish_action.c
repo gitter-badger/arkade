@@ -133,7 +133,7 @@ void publish_action(vector_t *arguments) {
         FILE *fp = popen("git ls-remote --exit-code ark_remote", "r");
         char out[100];
         if (!fp) {
-            printf("Yo wtf shitty popen file thing\n");
+            printf("error: could not create process\n");
             pclose(fp);
             return;
         }
