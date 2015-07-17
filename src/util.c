@@ -37,7 +37,7 @@ char *__concat(char *name, ...) {
     char* str;
     va_list arg;
     va_start(arg, name);
-    while((str = va_arg(arg, char*)) != NULL) {
+    while ((str = va_arg(arg, char*))) {
         final = sdscat(final, str);
     }
     va_end(arg);
