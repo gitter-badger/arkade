@@ -12,8 +12,6 @@ bool __create_process(char *command, char *input, ...) {
     }
     
     if (input) {
-        printf("running this shit nigga\n");
-
         va_list arg;
         va_start(arg, input);
         char *str = NULL;
@@ -22,8 +20,12 @@ bool __create_process(char *command, char *input, ...) {
         while ((str = va_arg(arg, char*)) != NULL) {
             fputs(str, process);
         }
+        fputs("\n", process); // flush
+        fflush(process);
         va_end(arg);
     }
+
+    pclose(process);
 
     return proc.failed;
 }
