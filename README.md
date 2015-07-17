@@ -5,7 +5,7 @@ which will eventually be its own project (and written in Ark).
 ## Requirements
 * GNU Make
 * A C compiler like Clang or GCC
-* Curl 7
+* Curl
 
 ## Building
 
@@ -25,7 +25,7 @@ $ export PATH=$PATH:~/path/to/arkade/bin
 Note that we assume you have arkade added to your `$PATH`.
 
 ### Makefile
-If you are using gcc instead of clang, make sure you change `CC` in the Makefile from `CC = clang` to `CC = gcc`, 
+If you are using gcc instead of clang, make sure you change `CC` in the Makefile from `CC = clang` to `CC = gcc`
 <sup>or better yet, install clang ;)</sup>
 
 ### Initial Setup
