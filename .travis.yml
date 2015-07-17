@@ -4,4 +4,4 @@ notifications:
  email: false
 
 script:
- - make install
+ - make all
