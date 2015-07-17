@@ -6,13 +6,13 @@
 
 #include "vector.h"
 
-#define create_process(...) (__create_process(__VA_ARGS__, false))
+#define exec_process(...) (__exec_process(__VA_ARGS__, false))
 
 typedef struct {
     char *output;
     bool failed;
 } process_t;
 
-bool __create_process(char *command, char *input, ...);
+bool __exec_process(char *command, char *input, ...);
 
 #endif // __PROCESS_HANDLER

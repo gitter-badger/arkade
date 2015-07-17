@@ -139,7 +139,7 @@ void publish_action(vector_t *arguments) {
         }
         if (!fgets(out, sizeof(out) - 1, fp)) {
             char *remote_cmd = concat("git remote add ark_remote ", repo_url);
-            create_process(remote_cmd);
+            exec_process(remote_cmd);
             sdsfree(remote_cmd);
         }
         else {
@@ -148,10 +148,10 @@ void publish_action(vector_t *arguments) {
         pclose(fp);
 
         if (has_license) {
-            create_process("git pull ark_remote master --force");
+            exec_process("git pull ark_remote master --force");
         }
-        create_process("git add --all");
-        create_process("git commit -m 'initial commit'");
+        exec_process("git add --all");
+        exec_process("git commit -m 'initial commit'");
 
         char *push_command = concat(
             "git push https://",
@@ -162,7 +162,7 @@ void publish_action(vector_t *arguments) {
             project_name,
             ".git --all"
         );
-        create_process(push_command);
+        exec_process(push_command);
         destroy_json_builder(json);
     }
 

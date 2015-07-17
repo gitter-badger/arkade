@@ -1,6 +1,6 @@
 #include "process_handler.h"
 
-bool __create_process(char *command, char *input, ...) {
+bool __exec_process(char *command, char *input, ...) {
     process_t proc;
     proc.output = NULL;
     proc.failed = false;

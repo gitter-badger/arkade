@@ -17,11 +17,11 @@ void build_action(vector_t *arguments) {
         // at all, we're also just throwing in some random variable
         // that should probably be sanitized?
         // same applies for the one below
-        create_process(build_method);
+        exec_process(build_method);
         sdsfree(build_method);
     }
     else {
-        create_process("ark build src/*.ark");
+        exec_process("ark build src/*.ark");
     }
 
     destroy_loader(loader);
