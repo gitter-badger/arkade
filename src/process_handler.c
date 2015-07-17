@@ -21,6 +21,7 @@ bool __create_process(char *command, char *input, ...) {
             fputs(str, process);
         }
         fputs("\n", process); // flush
+        fflush(process);
         va_end(arg);
     }
 
