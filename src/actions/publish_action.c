@@ -134,14 +134,17 @@ void publish_action(vector_t *arguments) {
         char out[100];
         if (!fp) {
             printf("Yo wtf shitty popen file thing\n");
-            exit(1);
+            pclose(fp);
+            return -1;
         }
-        if (fgets(out, sizeof(out)-1, fp) == NULL) {
+        if (!fgets(out, sizeof(out) - 1, fp)) {
             char *remote_cmd = concat("git remote add ark_remote ", repo_url);
             create_process(remote_cmd);
             sdsfree(remote_cmd);
         }
-        else printf("Remote found. thanks \n");
+        else {
+            printf("Remote found. thanks \n");
+        }
         pclose(fp);
 
         if (has_license) {
@@ -159,10 +162,7 @@ void publish_action(vector_t *arguments) {
             project_name,
             ".git --all"
         );
-        // char *push_command = "git push ark_remote master";
         create_process(push_command);
-        // sdsfree(push_command);
-
         destroy_json_builder(json);
     }
 
