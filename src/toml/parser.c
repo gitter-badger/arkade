@@ -181,8 +181,15 @@ node_t *parse_node(parser_t *parser) {
         return node;
     }
 
-    printf("what node is it?\n");
+    bare_key_t *bare_key = parse_key(parser);
+    if (parser) {
+        node_t *node = create_node();
+        node->kind = BARE_KEY_NODE;
+        node->bare_key = bare_key;
+        return node;
+    }
 
+    printf("what node is it `%s`?\n", peek_ahead(parser, 0)->contents);
     return false;
 }
 
@@ -202,8 +209,13 @@ void put_node(parser_t *parser, node_t *node) {
             hashmap_put(parser->ast, array_table->name, array_table);
             break;
         }
+        case BARE_KEY_NODE: {
+            bare_key_t *bare_key = node->bare_key;
+            hashmap_put(parser->ast, bare_key->name, bare_key);
+            break;
+        }
         default: {
-            printf("unrecognized node\n");
+            printf("unrecognized node, current token `%s`\n", peek_ahead(parser, 0)->contents);
             break;
         }
     }
@@ -223,6 +235,10 @@ void start_parsing(parser_t *parser) {
         // keep going till we hit EOF token
         while (!match_token(parser, "", TOKEN_EOF, 0) && parser->running) {
             node_t *node = parse_node(parser);
+            if (!node) {
+                printf("errored\n");
+                break;
+            }
             put_node(parser, node);
         }
     }
