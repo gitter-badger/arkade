@@ -61,7 +61,7 @@ static inline bool is_letter_or_digit(char c) {
 }
 
 static inline bool is_identifier(char c) {
-    return (is_letter_or_digit(c) || c == '_');
+    return (is_letter_or_digit(c) || c == '_' || c == '.' || c == '-');
 }
 
 static inline bool is_operator(char c) {

@@ -140,7 +140,7 @@ void get_next_token(lexer_t *self) {
             if (is_digit(self->current_character)) {
                 recognize_digit(self);
             }
-            else if (is_identifier(self->current_character)) {
+            else if (is_letter_or_digit(self->current_character)) {
                 recognize_identifier(self);
             }
             else if (is_operator(self->current_character)) {

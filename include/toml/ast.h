@@ -87,7 +87,8 @@ typedef struct {
 
 typedef enum {
     TABLE_NODE = 0,
-    ARRAY_TABLE_NODE = 1
+    ARRAY_TABLE_NODE,
+    BARE_KEY_NODE
 } node_type;
 
 /*
@@ -98,6 +99,7 @@ typedef struct {
     node_type kind;
     array_table_t *array_table;
     table_t *table;
+    bare_key_t *bare_key;
 } node_t;
 
 // NODE UTIL

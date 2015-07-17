@@ -14,6 +14,10 @@ void start_parsing_toml(toml_t *toml, vector_t *files) {
     start_parsing(toml->parser);
 }
 
+void dump_toml(toml_t *toml) {
+    // todo pretty print AST
+}
+
 void destroy_toml(toml_t *toml) {
     destroy_lexer(toml->lex);
     destroy_parser(toml->parser);
