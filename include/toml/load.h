@@ -21,9 +21,9 @@ table_t *get_table(load_t *loader, char *name);
 
 array_t *get_array(char *name, table_t *table);
 
-expr_t *get_array_value_expr(int index, array_t *array);
+expr_t *get_array_value_expr(array_t *array, int index);
 
-char *get_array_value(int index, array_t *array);
+char *get_array_value(array_t *array, int index);
 
 char *get_string(char *name, table_t *table);
 

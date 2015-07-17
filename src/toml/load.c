@@ -28,7 +28,7 @@ array_t *get_array(char *name, table_t *table) {
     return false;
 }
 
-expr_t *get_array_value_expr(int index, array_t *array) {
+expr_t *get_array_value_expr(array_t *array, int index) {
     if (index >= array->values->size || index < 0) {
         printf("error: array value out of bounds, %d (cap is %d)\n", index, array->values->size);
         return false;
@@ -43,8 +43,8 @@ expr_t *get_array_value_expr(int index, array_t *array) {
     return false;
 }
 
-char *get_array_value(int index, array_t *array) {
-    expr_t *expr = get_array_value_expr(index, array);
+char *get_array_value(array_t *array, int index) {
+    expr_t *expr = get_array_value_expr(array, index);
     if (expr->kind == LITERAL_EXPR) {
         return expr->literal_expr->value;
     }

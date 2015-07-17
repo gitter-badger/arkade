@@ -28,7 +28,7 @@ void parse_arguments(int argc, char** argv) {
     hashmap_put(commands, "publish", create_command("publish", "Publishes the project to the specified remote", &publish_action, 0));
     hashmap_put(commands, "build", create_command("build", "Compiles the current Ark project", &build_action, 0));
     hashmap_put(commands, "login", create_command("login", "Setup your GitHub Authentication Token", &login_action, 1));
-    hashmap_put(commands, "update", create_command("update", "Rebuilds all dependencies", &update_action, 0));
+    hashmap_put(commands, "fetch", create_command("fetch", "Fetches all dependencies", &fetch_action, 0));
 
     // not enough arguments given, just show the help
     // menu
