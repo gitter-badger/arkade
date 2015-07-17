@@ -1,4 +1,4 @@
-## Arkade  ![Travis status](https://travis-ci.org/vnev/arkade.svg?branch=master)
+## Arkade  ![Travis status](https://travis-ci.org/ark-lang/arkade.svg?branch=master)
 A package manager for Ark. It includes a hand-written TOML parser,
 which will eventually be its own project (and written in Ark).
 
@@ -25,7 +25,7 @@ $ export PATH=$PATH:~/path/to/arkade/bin
 Note that we assume you have arkade added to your `$PATH`.
 
 ### Initial Setup
-Arkade works alognside GitHub, you need to generate a token key that it can use to create repositories, etc. on your 
+Arkade works alongside GitHub, you need to generate a token key that it can use to create repositories, etc. on your 
 account. GitHub has a good [article on this](https://help.github.com/articles/creating-an-access-token-for-command-line-use/). Once you have acquired your token, you need to set this up with Arkade. To do so, you use the login command followed by the token you have just created:
 
 ```bash
