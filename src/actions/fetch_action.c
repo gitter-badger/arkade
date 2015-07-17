@@ -2,16 +2,24 @@
 
 int dependencies_iterate(any_t data, any_t item_p) {
 	bare_key_t *item = item_p;
-	char *folder = item->name;
+
 	array_t *stuff = item->value->array_expr;
-	printf("%d\n", stuff->values->size);
+
 	char *url = get_array_value(stuff, 0);
-	char *version = get_array_value(stuff, 1);
-	char *clone_process = concat("git clone -b ", version, " --depth 1 ", url, " _deps/", folder);
-	printf("%s\n", clone_process);
+    char *version = get_array_value(stuff, 1);
+    char *folder =item->name;
+
+    // TODO fix this, for some reason concat
+    // crashes and burns if you give it more
+    // than 5 arguments, so we concat twice
+	char *clone_temp = concat("git clone -b ", version, " --depth 1 ", url, " _deps/");
+    char *clone_process = concat(clone_temp, folder);
+
 	exec_process(clone_process);
+
 	sdsfree(clone_process);
-	// printf("\n%s %s %s\n\n", folder, url, version);
+    sdsfree(clone_temp);
+
 	return MAP_OK;
 }
 

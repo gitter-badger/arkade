@@ -37,12 +37,10 @@ char *__concat(char *name, ...) {
     char* str;
     va_list arg;
     va_start(arg, name);
-    while((str = va_arg(arg, char*)) != NULL) {
-        printf("%s\n", str);
+    while ((str = va_arg(arg, char*))) {
         final = sdscat(final, str);
     }
     va_end(arg);
-    printf("tits up %s\n", final);
     return final;
 }
 
