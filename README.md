@@ -24,6 +24,10 @@ $ export PATH=$PATH:~/path/to/arkade/bin
 ## Using
 Note that we assume you have arkade added to your `$PATH`.
 
+### Makefile
+If you are using gcc instead of clang, make sure you change `CC` in the Makefile from `CC = clang` to `CC = gcc`, 
+<sup>or better yet, install clang ;)</sup>
+
 ### Initial Setup
 Arkade works alongside GitHub, you need to generate a token key that it can use to create repositories, etc. on your 
 account. GitHub has a good [article on this](https://help.github.com/articles/creating-an-access-token-for-command-line-use/). Once you have acquired your token, you need to set this up with Arkade. To do so, you use the login command followed by the token you have just created:
