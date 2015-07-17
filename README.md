@@ -45,7 +45,7 @@ To create an arkade project, you use the new command:
 
 This will create a directory name, with all the necessary files and directories that Arkade needs to work correctly. Note it will also initialize a Git repository. You will also need to setup the minimum requirements in the configuration file. It should include (at minimum) the name of the project, you can also give a few extra keys:
 
-todo make this a table with examples:
+_todo make this a table with examples:_
 
 * name
 * version
