@@ -9,9 +9,10 @@
 typedef struct {
     char *result;
     int item;
+    bool verbose;
 } json_builder_t;
 
-json_builder_t *create_json_builder();
+json_builder_t *create_json_builder(bool verbose);
 
 void json_open_object(json_builder_t *builder);
 

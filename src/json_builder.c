@@ -1,9 +1,10 @@
 #include "json_builder.h"
 
-json_builder_t *create_json_builder() {
+json_builder_t *create_json_builder(bool is_verbose) {
 	json_builder_t *builder = malloc(sizeof(*builder));
 	builder->result = sdsempty();
 	builder->item = 0;
+	builder->verbose = is_verbose;
 	return builder;
 }
 
@@ -68,8 +69,9 @@ void json_pair(json_builder_t *builder, char *name) {
 }
 
 void destroy_json_builder(json_builder_t *builder) {
-	printf("json dump:\n%s\n", builder->result);
-
+	if (builder->verbose) {
+		printf("json dump:\n%s\n", builder->result);
+	}
 	sdsfree(builder->result);
 	free(builder);
 }
