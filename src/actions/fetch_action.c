@@ -3,11 +3,12 @@
 int dependencies_iterate(any_t data, any_t item_p) {
 	bare_key_t *item = item_p;
 
-	array_t *stuff = item->value->array_expr;
+	array_t *depedency_data = item->value->array_expr;
 
-	char *url = get_array_value(stuff, 0);
-    char *version = get_array_value(stuff, 1);
+	char *url = get_array_value(0, depedency_data);
+    char *version = get_array_value(1, depedency_data);
     char *folder = item->name;
+
     if (chdir("_deps") == -1) {
         printf("error: are you in the Ark project directory?\n");
         return -1;
@@ -48,7 +49,7 @@ int dependencies_iterate(any_t data, any_t item_p) {
     // TODO fix this, for some reason concat
     // crashes and burns if you give it more
     // than 5 arguments, so we concat twice
-	char *clone_temp = concat("git clone -b ", version, " --depth 1 ", url, " ");
+	char *clone_temp = concat("git clone -b ", version, " --depth 1 ", url, " _deps/");
     char *clone_process = concat(clone_temp, folder);
 
 	exec_process(clone_process);
