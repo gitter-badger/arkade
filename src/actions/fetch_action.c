@@ -15,7 +15,7 @@ int dependencies_iterate(any_t data, any_t item_p) {
 
     DIR *dir = opendir(folder);
     if (dir) {
-        if(chdir(folder)) {
+        if(chdir(folder) == 0) {
             FILE *fp;
             char output[128];
             fp = popen("git tag", "r");
@@ -25,12 +25,11 @@ int dependencies_iterate(any_t data, any_t item_p) {
                 return -2;
             }
             while (fgets(output, sizeof(output) - 1, fp) != NULL) {
-                printf("%s", output);
-                if (!strcmp(version, output)) {
+                if (strcmp(version, output)) {
                     // since we know that the version is the same
                     // just update the repo with a git pull
-                    printf("found same shit. git pulling\n");
-                    char *proc = "git pull";
+                    printf("git pulling...\n");
+                    char *proc = sdsnew("git pull");
                     exec_process(proc);
                     sdsfree(proc);
                     break;
