@@ -42,7 +42,7 @@ token = "da39a3ee5e6b4b0d3255bfef95601890afd80709"
 # specify verbose for every project
 verbose = true
 
-[github]
+[config.github]
 # token
 auth = [ "token", ["felixangell", "da39a3ee5e6b4b0d3255bfef95601890afd80709"] ]
 
@@ -51,3 +51,14 @@ auth = [ "ssh", ["felixangell", "/path/to/id_rsa", "/path/to/id_rsa.pub"] ]
 ```
 
 #### Project Configuration
+Every Arkade project *must* have a configuration file, it should contain
+at the bare minimum a name and a version:
+
+```toml
+[package]
+name = "project-name"
+version = "0.0.1" # version
+```
+
+#### Creating an Arkade project
+do this later
