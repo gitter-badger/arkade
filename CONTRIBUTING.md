@@ -21,7 +21,7 @@ and macros should be in capital snake case:
     #define BREAD_SIZE "big"
     const int NUM_OF_BREADS = 21;
 
-We also prefix structures with `_t`, this makes usage more obvious in
+We also suffix structures with `_t`, this makes usage more obvious in
 combination with the naming style:
 
     // good
