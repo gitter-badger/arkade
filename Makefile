@@ -14,7 +14,7 @@ endif
 
 C_SRC = $(wildcard src/*.c src/toml/*.c src/actions/*.c)
 C_INCLUDE = -Iinclude/ -Iinclude/toml/
-C_FLAGS = -Wall -Wextra -g -std=${C_STD} -lcurl -Wno-unused-parameter ${C_INCLUDE} -o ${EXE_PATH}
+C_FLAGS = -Wall -Wextra -g -std=${C_STD} -lcurl -Wno-unused-parameter -pedantic ${C_INCLUDE} -o ${EXE_PATH}
 
 .PHONY: clean
 
