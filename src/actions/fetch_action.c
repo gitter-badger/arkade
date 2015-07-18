@@ -15,9 +15,35 @@ int dependencies_iterate(any_t data, any_t item_p) {
 
     DIR *dir = opendir(folder);
     if (dir) {
-        printf("error: clone already exists. Please delete it before retrying.\n");
-        closedir(dir);
-        return -1;
+        if(chdir(folder)) {
+            FILE *fp;
+            char output[128];
+            fp = popen("git tag", "r");
+            if (fp == NULL) {
+                // TODO better error handling
+                printf("screwed up with git tag checking.");
+                return -2;
+            }
+            while (fgets(output, sizeof(output) - 1, fp) != NULL) {
+                printf("%s", output);
+                if (!strcmp(version, output)) {
+                    // since we know that the version is the same
+                    // just update the repo with a git pull
+                    printf("found same shit. git pulling\n");
+                    char *proc = "git pull";
+                    exec_process(proc);
+                    sdsfree(proc);
+                    break;
+                }
+                // else: we now know that the versions are different
+                // TODO check if remote is greater than local
+                // and perform operation
+            }
+            pclose(fp);
+            closedir(dir);
+            chdir("../");
+            return MAP_OK;
+        }
     }
 
     // TODO fix this, for some reason concat
