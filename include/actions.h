@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <curl/curl.h>
+#include <dirent.h>
 
 #include "load.h"
 #include "util.h"
