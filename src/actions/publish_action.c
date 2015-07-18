@@ -71,6 +71,13 @@ void publish_action(vector_t *arguments) {
         private = false;
     }
 
+    // check if the user has specified verbose output in the config file
+    bool is_verbose = true;
+    if (get_string_contents("verbose", package)) {
+        printf("No verbose output\n");
+        is_verbose = false;
+    }
+
     char *license_option = get_string_contents("license", package);
     char *curl_auth = concat(github_username, ":", auth_token);
     char *repo_url = concat("http://www.github.com/", github_username, "/", project_name);
@@ -87,7 +94,7 @@ void publish_action(vector_t *arguments) {
         // the license exists and what not.
         bool has_license = license_option && license_exists(license_option);
 
-        json_builder_t *json = create_json_builder();
+        json_builder_t *json = create_json_builder(is_verbose);
 
         json_open_object(json);
 
@@ -122,10 +129,14 @@ void publish_action(vector_t *arguments) {
         curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
 
         curl_easy_setopt(curl, CURLOPT_USERPWD, curl_auth);
-        // curl_easy_setopt(curl, CURLOPT_VERBOSE, 1);
+        curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
         curl_easy_setopt(curl, CURLOPT_URL, "https://api.github.com/user/repos");
         curl_easy_setopt(curl, CURLOPT_POST, 1);
         curl_easy_setopt(curl, CURLOPT_POSTFIELDS, repo_create_request);
+        // TODO find a way to suppress the returned JSON from Github
+        if (!is_verbose) {
+            curl_easy_setopt(curl, CURLOPT_VERBOSE, 0L);
+        }
 
         curl_easy_perform(curl);
         curl_easy_cleanup(curl);

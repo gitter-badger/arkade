@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <curl/curl.h>
+#include <dirent.h>
 
 #include "load.h"
 #include "util.h"
@@ -22,7 +23,7 @@ void help_action(vector_t *arguments);
 
 void new_action(vector_t *arguments);
 
-void update_action(vector_t *arguments);
+void fetch_action(vector_t *arguments);
 
 void publish_action(vector_t *arguments);
 

@@ -18,9 +18,9 @@ C_FLAGS = -Wall -Wextra -g -std=${C_STD} -lcurl -Wno-unused-parameter -pedantic 
 
 .PHONY: clean
 
-all: clean
+all: 	clean
 	@mkdir -p ${EXE_DIR}
-	${CC} ${C_SRC} ${C_FLAGS}
+	@${CC} ${C_SRC} ${C_FLAGS}
 
 clean:
 	@rm -f *.o
