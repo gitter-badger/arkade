@@ -64,6 +64,16 @@ _todo make this a table with examples:_
 * desc
 * private
 
+### Downloading dependencies
+If your project has any dependencies, you can specify them in your `arkade.toml` file under the `[dependencies]` directory, in a format like the one given below.
+
+```toml
+[dependencies]
+
+custom_dependency_name = [ "url_to_github_repo_of_dependency", "version" ]
+```
+This causes Arkade to download the given dependency into a folder with the same name as `custom_dependency_name`, inside the `_deps` directory. As of right now, Arkade can only fetch dependencies from GitHub. You can specify multiple dependencies, as well as the version that you want. And that's it!
+
 ### Publishing an Arkade project
 Once you've written up your project and you want to publish it, you use the publish command. Currently, this will publish the repository to your GitHub. Eventually, this will take an argument (major|minor|patch) and it will create a patch and a release on your GitHub repository accordingly.
 
