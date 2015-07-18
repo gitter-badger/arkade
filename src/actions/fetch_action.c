@@ -19,7 +19,6 @@ int dependencies_iterate(any_t data, any_t item_p) {
         closedir(dir);
         return -1;
     }
-    // TODO check git tag version and handle appropriately
 
     // TODO fix this, for some reason concat
     // crashes and burns if you give it more
