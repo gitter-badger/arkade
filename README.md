@@ -1,4 +1,6 @@
 ## Arkade  ![Travis status](https://travis-ci.org/ark-lang/arkade.svg?branch=master)
+
+[![Join the chat at https://gitter.im/ark-lang/arkade](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/ark-lang/arkade?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 A package manager for Ark. It includes a hand-written TOML parser,
 which will eventually be its own project (and written in Ark).
 
